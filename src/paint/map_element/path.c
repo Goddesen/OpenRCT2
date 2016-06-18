@@ -154,50 +154,31 @@ void path_bit_bins_paint(rct_scenery_entry* pathBitEntry, rct_map_element* mapEl
 }
 
 /* rct2: 0x006A5E81 */
-void path_bit_benches_paint(rct_scenery_entry* pathBitEntry, rct_map_element* mapElement, int height, uint8 edges, uint32 pathBitImageFlags) {
-	uint32 imageId;
+void path_bit_benches_paint(rct_scenery_entry* pathBitEntry, rct_map_element* mapElement, int height, uint8 edges, uint32 pathBitImageFlags)
+{
+	const sint8 offset[4][2] = { {7, 16}, {16, 25}, {25, 16}, {16, 7} };
+	const sint16 bound_box_len[4][3] = { {0, 16, 7}, {16, 0, 7}, {0, 16, 7}, {16, 0, 7} };
+	const sint16 bound_box_offset[4][2] = { {6, 8}, {8, 23}, {23, 8}, {8, 6} };
 
-	if (!(edges & (1 << 0))) {
-		imageId = pathBitEntry->image + 1;
+	uint32 base_imageId = pathBitEntry->image + 1;
+	uint32 rotation = get_current_rotation();
 
-		if (mapElement->flags & MAP_ELEMENT_FLAG_BROKEN)
-			imageId += 4;
+	if (mapElement->flags & MAP_ELEMENT_FLAG_BROKEN)
+		base_imageId += 4;
 
-		imageId |= pathBitImageFlags;
+	for (int i = 0; i < 4; ++i) {
+		if (edges & (1 << i))
+			continue;
 
-		sub_98197C(imageId, 7, 16, 0, 16, 7, height, 6, 8, height + 2, get_current_rotation());
-	}
-	if (!(edges & (1 << 1))) {
-		imageId = pathBitEntry->image + 2;
+		uint32 imageId = (base_imageId + i) | pathBitImageFlags;
 
-		if (mapElement->flags & MAP_ELEMENT_FLAG_BROKEN)
-			imageId += 4;
-
-		imageId |= pathBitImageFlags;
-
-		sub_98197C(imageId, 16, 25, 16, 0, 7, height, 8, 23, height + 2, get_current_rotation());
-	}
-
-	if (!(edges & (1 << 2))) {
-		imageId = pathBitEntry->image + 3;
-
-		if (mapElement->flags & MAP_ELEMENT_FLAG_BROKEN)
-			imageId += 4;
-
-		imageId |= pathBitImageFlags;
-
-		sub_98197C(imageId, 25, 16, 0, 16, 7, height, 23, 8, height + 2, get_current_rotation());
-	}
-
-	if (!(edges & (1 << 3))) {
-		imageId = pathBitEntry->image + 4;
-
-		if (mapElement->flags & MAP_ELEMENT_FLAG_BROKEN)
-			imageId += 4;
-
-		imageId |= pathBitImageFlags;
-
-		sub_98197C(imageId, 16, 7, 16, 0, 7, height, 8, 6, height + 2, get_current_rotation());
+		sub_98197C(imageId,
+				   offset[i][0], offset[i][1],
+				   bound_box_len[i][0], bound_box_len[i][1], bound_box_len[i][2],
+				   height,
+				   bound_box_offset[i][0], bound_box_offset[i][1], height + 2,
+				   rotation
+				);
 	}
 }
 
