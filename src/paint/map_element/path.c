@@ -183,7 +183,8 @@ void path_bit_benches_paint(rct_scenery_entry* pathBitEntry, rct_map_element* ma
 }
 
 /* rct2: 0x006A6008 */
-void path_bit_jumping_fountains_paint(rct_scenery_entry* pathBitEntry, rct_map_element* mapElement, int height, uint8 edges, uint32 pathBitImageFlags, rct_drawpixelinfo* dpi) {
+void path_bit_jumping_fountains_paint(rct_scenery_entry* pathBitEntry, rct_map_element* mapElement, int height, uint8 edges, uint32 pathBitImageFlags, rct_drawpixelinfo* dpi)
+{
 	if (dpi->zoom_level != 0)
 		return;
 
