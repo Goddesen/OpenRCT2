@@ -14,21 +14,21 @@
  *****************************************************************************/
 #pragma endregion
 
-#include "map_element.h"
-#include "../../addresses.h"
 #include "../../interface/viewport.h"
-#include "../../ride/track.h"
-#include "../../world/footpath.h"
-#include "../../config.h"
-#include "../paint.h"
-#include "../../world/scenery.h"
-#include "surface.h"
-#include "../../ride/track_paint.h"
 #include "../../localisation/localisation.h"
-#include "../../game.h"
-#include "../supports.h"
 #include "../../peep/staff.h"
+#include "../../ride/track.h"
+#include "../../ride/track_paint.h"
+#include "../../world/footpath.h"
+#include "../../world/scenery.h"
+#include "../../addresses.h"
+#include "../../config.h"
+#include "../../game.h"
 #include "../../object_list.h"
+#include "../paint.h"
+#include "../supports.h"
+#include "map_element.h"
+#include "surface.h"
 
 // #3628: Until path_paint is implemented, this variable is used by scrolling_text_setup
 //        to use the old string arguments array. Remove when scrolling_text_setup is no
