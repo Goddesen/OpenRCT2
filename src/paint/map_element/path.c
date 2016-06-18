@@ -118,73 +118,38 @@ void path_bit_lights_paint(rct_scenery_entry* pathBitEntry, rct_map_element* map
 }
 
 /* rct2: 0x006A5C94 */
-void path_bit_bins_paint(rct_scenery_entry* pathBitEntry, rct_map_element* mapElement, int height, uint8 edges, uint32 pathBitImageFlags) {
+void path_bit_bins_paint(rct_scenery_entry* pathBitEntry, rct_map_element* mapElement, int height, uint8 edges, uint32 pathBitImageFlags)
+{
 	if (footpath_element_is_sloped(mapElement))
 		height += 8;
 
-	uint32 imageId;
+	const sint8 offset[4][2] = { {7, 16}, {16, 25}, {25, 16}, {16, 7} };
+	const sint16 bound_box_offset[4][2] = { {7, 16}, {16, 25}, {25, 16}, {16, 7} };
 
-	if (!(edges & (1 << 0))) {
-		imageId = pathBitEntry->image + 5;
+	uint32 base_imageId = pathBitEntry->image + 9;
+	uint32 rotation = get_current_rotation();
+
+	for (int i = 0; i < 4; ++i)  {
+		if (edges & (1 << i))
+			continue;
+
+		uint32 imageId = base_imageId + i;
+
+		if (mapElement->flags & MAP_ELEMENT_FLAG_BROKEN) {
+			imageId -= 4;
+		} else if (mapElement->properties.path.addition_status & rol8(0x3 << (i*2), rotation)) {
+			imageId -= 8;
+		}
 
 		imageId |= pathBitImageFlags;
 
-		if (!(mapElement->flags & MAP_ELEMENT_FLAG_BROKEN)) {
-			imageId -= 4;
-			
-			if (!(mapElement->properties.path.addition_status & (0x3 << get_current_rotation())))
-				imageId += 8;
-		}
-		
-
-		sub_98197C(imageId, 7, 16, 1, 1, 7, height, 7, 16, height + 2, get_current_rotation());
-	}
-	if (!(edges & (1 << 1))) {
-		imageId = pathBitEntry->image + 6;
-
-		imageId |= pathBitImageFlags;
-
-		if (!(mapElement->flags & MAP_ELEMENT_FLAG_BROKEN)) {
-			imageId -= 4;
-
-			if (!(mapElement->properties.path.addition_status & rol8(0xC, get_current_rotation())))
-				imageId += 8;
-		}
-		
-
-		sub_98197C(imageId, 16, 25, 1, 1, 7, height, 16, 25, height + 2, get_current_rotation());
-	}
-
-	if (!(edges & (1 << 2))) {
-		imageId = pathBitEntry->image + 7;
-
-		imageId |= pathBitImageFlags;
-
-		if (!(mapElement->flags & MAP_ELEMENT_FLAG_BROKEN)) {
-			imageId -= 4;
-
-			if (!(mapElement->properties.path.addition_status & rol8(0x30, get_current_rotation())))
-				imageId += 8;
-		}
-		
-
-		sub_98197C(imageId, 25, 16, 1, 1, 7, height, 25, 16, height + 2, get_current_rotation());
-	}
-
-	if (!(edges & (1 << 3))) {
-		imageId = pathBitEntry->image + 8;
-
-		imageId |= pathBitImageFlags;
-
-		if (!(mapElement->flags & MAP_ELEMENT_FLAG_BROKEN)) {
-			imageId -= 4;
-
-			if (!(mapElement->properties.path.addition_status & rol8(0xC0, get_current_rotation())))
-				imageId += 8;
-		}
-		
-
-		sub_98197C(imageId, 16, 7, 1, 1, 7, height, 16, 7, height + 2, get_current_rotation());
+		sub_98197C(imageId,
+				   offset[i][0], offset[i][1],
+				   1, 1, 7,
+				   height,
+				   bound_box_offset[i][0], bound_box_offset[i][1], height + 2,
+				   rotation
+				);
 	}
 }
 
