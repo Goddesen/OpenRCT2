@@ -86,53 +86,34 @@ void loc_6A37C9(rct_map_element * mapElement, int height, rct_footpath_entry * f
 void loc_6A3B57(rct_map_element* mapElement, sint16 height, rct_footpath_entry* footpathEntry, bool hasFences, uint32 imageFlags, uint32 sceneryImageFlags);
 
 /* rct2: 0x006A5AE5 */
-void path_bit_lights_paint(rct_scenery_entry* pathBitEntry, rct_map_element* mapElement, int height, uint8 edges, uint32 pathBitImageFlags) {
+void path_bit_lights_paint(rct_scenery_entry* pathBitEntry, rct_map_element* mapElement, int height, uint8 edges, uint32 pathBitImageFlags)
+{
 	if (footpath_element_is_sloped(mapElement))
 		height += 8;
 
-	uint32 imageId;
+	const sint8 offset[4][2] = { {2, 16}, {16, 30}, {30, 16}, {16, 2} };
+	const sint16 bound_box_len[4][2] = { {1, 1}, {1, 0}, {0, 1}, {1, 1} };
+	const sint16 bound_box_offset[4][2] = { {3, 16}, {16, 29}, {29, 16}, {16, 3} };
 
-	if (!(edges & (1 << 0))) {
-		imageId = pathBitEntry->image + 1;
+	uint32 base_imageId = pathBitEntry->image + 1;
+	uint32 rotation = get_current_rotation();
 
-		if (mapElement->flags & MAP_ELEMENT_FLAG_BROKEN)
-			imageId += 4;
+	if (mapElement->flags & MAP_ELEMENT_FLAG_BROKEN)
+		base_imageId += 4;
 
-		imageId |= pathBitImageFlags;
+	for (int i = 0; i < 4; ++i) {
+		if (edges & (1 << i))
+			continue;
 
-		sub_98197C(imageId, 2, 16, 1, 1, 23, height, 3, 16, height + 2, get_current_rotation());
-	}
-	if (!(edges & (1 << 1))) {
-		imageId = pathBitEntry->image + 2;
+		uint32 imageId = (base_imageId + i) | pathBitImageFlags;
 
-		if (mapElement->flags & MAP_ELEMENT_FLAG_BROKEN)
-			imageId += 4;
-
-		imageId |= pathBitImageFlags;
-
-		sub_98197C(imageId, 16, 30, 1, 0, 23, height, 16, 29, height + 2, get_current_rotation());
-	}
-
-	if (!(edges & (1 << 2))) {
-		imageId = pathBitEntry->image + 3;
-
-		if (mapElement->flags & MAP_ELEMENT_FLAG_BROKEN)
-			imageId += 4;
-
-		imageId |= pathBitImageFlags;
-
-		sub_98197C(imageId, 30, 16, 0, 1, 23, height, 29, 16, height + 2, get_current_rotation());
-	}
-
-	if (!(edges & (1 << 3))) {
-		imageId = pathBitEntry->image + 4;
-
-		if (mapElement->flags & MAP_ELEMENT_FLAG_BROKEN)
-			imageId += 4;
-
-		imageId |= pathBitImageFlags;
-
-		sub_98197C(imageId, 16, 2, 1, 1, 23, height, 16, 3, height + 2, get_current_rotation());
+		sub_98197C(imageId,
+				   offset[i][0], offset[i][1],
+				   bound_box_len[i][0], bound_box_len[i][1], 23,
+				   height,
+				   bound_box_offset[i][0], bound_box_offset[i][1], height + 2,
+				   rotation
+				);
 	}
 }
 
