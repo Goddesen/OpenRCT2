@@ -19,14 +19,12 @@
 
 #include "../common.h"
 
-#define SHORTCUT_UNDEFINED 0xFFFF
-
 /** The current shortcut being changed. */
 extern uint8 gKeyboardShortcutChangeId;
 
-void keyboard_shortcut_set(sint32 key);
-void keyboard_shortcut_handle(sint32 key);
+void keyboard_shortcut_set(keypress key);
+void keyboard_shortcut_handle(keypress key);
 void keyboard_shortcut_handle_command(sint32 shortcutIndex);
-void keyboard_shortcut_format_string(char *buffer, size_t size, uint16 shortcutKey);
+void keyboard_shortcut_format_string(char *buffer, size_t size, keypress shortcutKey);
 
 #endif

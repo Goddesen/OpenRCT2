@@ -311,7 +311,7 @@ extern network_configuration gConfigNetwork;
 extern notification_configuration gConfigNotifications;
 extern font_configuration gConfigFonts;
 
-extern uint16 gShortcutKeys[SHORTCUT_COUNT];
+extern keypress gShortcutKeys[SHORTCUT_COUNT];
 
 void config_get_default_path(utf8 *outPath, size_t size);
 void config_set_defaults();
