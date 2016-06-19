@@ -341,7 +341,7 @@ extern notification_configuration gConfigNotifications;
 extern font_configuration gConfigFonts;
 extern title_sequences_configuration gConfigTitleSequences;
 
-extern uint16 gShortcutKeys[SHORTCUT_COUNT];
+extern keypress gShortcutKeys[SHORTCUT_COUNT];
 
 void config_get_default_path(utf8 *outPath);
 void config_set_defaults();

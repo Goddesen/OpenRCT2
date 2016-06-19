@@ -89,7 +89,7 @@ void invalidate_scroll();
 static rct_mouse_data* get_mouse_input();
 void map_element_right_click(int type, rct_map_element *mapElement, int x, int y);
 int sub_6EDE88(int x, int y, rct_map_element **mapElement, int *outX, int *outY);
-int get_next_key();
+int get_next_key(keypress *keypress);
 static void game_handle_input_mouse(int x, int y, int state);
 void game_handle_edge_scroll();
 void game_handle_key_scroll();
@@ -1404,7 +1404,7 @@ static void input_update_tooltip(rct_window *w, int widgetIndex, int x, int y)
 void title_handle_keyboard_input()
 {
 	rct_window *w;
-	int key;
+	keypress key;
 
 	if (gOpenRCT2Headless) {
 		return;
@@ -1426,23 +1426,19 @@ void title_handle_keyboard_input()
 #endif
 	}
 
-	while ((key = get_next_key()) != 0) {
-		if (key == 255)
-			continue;
+	while (get_next_key(&key) == 0) {
 
 		// Reserve backtick for console
-		if (key == SDL_SCANCODE_GRAVE) {
+		if (key.keycode == SDLK_BACKQUOTE) {
 			if (gConfigGeneral.debugging_tools || gConsoleOpen) {
 				window_cancel_textbox();
 				console_toggle();
 			}
 			continue;
 		} else if (gConsoleOpen) {
-			console_input(key);
+			console_input(key.keycode);
 			continue;
 		}
-
-		key |= gInputPlaceObjectModifier << 8;
 
 		w = window_find_by_class(WC_CHANGE_KEYBOARD_SHORTCUT);
 		if (w != NULL) {
@@ -1450,10 +1446,10 @@ void title_handle_keyboard_input()
 		} else {
 			w = window_find_by_class(WC_TEXTINPUT);
 			if (w != NULL) {
-				window_text_input_key(w, key);
+				window_text_input_key(w, key.keycode);
 			}
 			
-			if (key == gShortcutKeys[SHORTCUT_SCREENSHOT]) {
+			if (platform_compare_keypress(key, gShortcutKeys[SHORTCUT_SCREENSHOT])) {
 				keyboard_shortcut_handle_command(SHORTCUT_SCREENSHOT);
 			}
 		}
@@ -1467,7 +1463,7 @@ void title_handle_keyboard_input()
 void game_handle_keyboard_input()
 {
 	rct_window *w;
-	int key;
+	keypress key;
 
 	if (!gConsoleOpen) {
 		// Handle mouse scrolling
@@ -1498,26 +1494,22 @@ void game_handle_keyboard_input()
 
 
 	// Handle key input
-	while (!gOpenRCT2Headless && (key = get_next_key()) != 0) {
-		if (key == 255)
-			continue;
+	while (!gOpenRCT2Headless && (get_next_key(&key) == 0)) {
 
 		// Reserve backtick for console
-		if (key == SDL_SCANCODE_GRAVE) {
+		if (key.keycode == SDLK_BACKQUOTE) {
 			if (gConfigGeneral.debugging_tools || gConsoleOpen) {
 				window_cancel_textbox();
 				console_toggle();
 			}
 			continue;
 		} else if (gConsoleOpen) {
-			console_input(key);
+			console_input(key.keycode);
 			continue;
 		} else if (gChatOpen) {
-			chat_input(key);
+			chat_input(key.keycode);
 			continue;
 		}
-
-		key |= gInputPlaceObjectModifier << 8;
 
 		w = window_find_by_class(WC_CHANGE_KEYBOARD_SHORTCUT);
 		if (w != NULL) {
@@ -1525,7 +1517,7 @@ void game_handle_keyboard_input()
 		} else {
 			w = window_find_by_class(WC_TEXTINPUT);
 			if (w != NULL) {
-				window_text_input_key(w, key);
+				window_text_input_key(w, key.keycode);
 			} else if (!gUsingWidgetTextBox) {
 				keyboard_shortcut_handle(key);
 			}
@@ -1537,15 +1529,14 @@ void game_handle_keyboard_input()
  *
  *  rct2: 0x00406CD2
  */
-int get_next_key()
+int get_next_key(keypress *keypress)
 {
-	int i;
-	for (i = 0; i < 221; i++) {
-		if (gKeysPressed[i]) {
-			gKeysPressed[i] = 0;
-			return i;
-		}
-	}
+	if (gNumKeysPressed < 1)
+		return -1;
+
+	--gNumKeysPressed;
+
+	*keypress = gKeysPressed[gNumKeysPressed];
 
 	return 0;
 }
@@ -1667,31 +1658,25 @@ void game_handle_key_scroll()
 	scrollX = 0;
 	scrollY = 0;
 
-	for (int shortcutId = SHORTCUT_SCROLL_MAP_UP; shortcutId <= SHORTCUT_SCROLL_MAP_RIGHT; shortcutId++) {
-		const int SHIFT = 0x100;
-		const int CTRL = 0x200;
-		const int ALT = 0x400;
-#ifdef __MACOSX__
-		const int CMD = 0x800;
-#endif
+	for (int shortcutId = SHORTCUT_SCROLL_MAP_UP; shortcutId <= SHORTCUT_SCROLL_MAP_RIGHT; ++shortcutId) {
+		keypress shortcutKey = gShortcutKeys[shortcutId];
 
-		uint16 shortcutKey = gShortcutKeys[shortcutId];
-		uint8 scancode = shortcutKey & 0xFF;
+		if (platform_shortcut_is_undefined(shortcutKey))
+			continue;
+		if (!gKeysState[SDL_GetScancodeFromKey(shortcutKey.keycode)])
+			continue;
 
-		if (shortcutKey == 0xFFFF) continue;
-		if (!gKeysState[scancode]) continue;
-
-		if (shortcutKey & SHIFT) {
+		if (shortcutKey.mod & KMOD_SHIFT) {
 			if (!gKeysState[SDL_SCANCODE_LSHIFT] && !gKeysState[SDL_SCANCODE_RSHIFT]) continue;
 		}
-		if (shortcutKey & CTRL) {
+		if (shortcutKey.mod & KMOD_CTRL) {
 			if (!gKeysState[SDL_SCANCODE_LCTRL] && !gKeysState[SDL_SCANCODE_RCTRL]) continue;
 		}
-		if (shortcutKey & ALT) {
+		if (shortcutKey.mod & KMOD_ALT) {
 			if (!gKeysState[SDL_SCANCODE_LALT] && !gKeysState[SDL_SCANCODE_RALT]) continue;
 		}
 #ifdef __MACOSX__
-		if (shortcutKey & CMD) {
+		if (shortcutKey.mod & KMOD_GUI) {
 			if (!gKeysState[SDL_SCANCODE_LGUI] && !gKeysState[SDL_SCANCODE_RGUI]) continue;
 		}
 #endif
