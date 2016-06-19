@@ -1394,6 +1394,8 @@ void title_handle_keyboard_input()
 	rct_window *w;
 	keypress key;
 
+	gCurKeyNum = 0;
+
 	if (gOpenRCT2Headless) {
 		return;
 	}
@@ -1452,6 +1454,8 @@ void game_handle_keyboard_input()
 {
 	rct_window *w;
 	keypress key;
+
+	gCurKeyNum = 0;
 
 	if (!gConsoleOpen) {
 		// Handle mouse scrolling
@@ -1519,12 +1523,18 @@ void game_handle_keyboard_input()
  */
 int get_next_key(keypress *keypress)
 {
-	if (gNumKeysPressed < 1)
+	static int cur_key = 0;
+
+	if (gNumKeysPressed < 1) {
+		cur_key = 0;
 		return -1;
+	}
 
 	--gNumKeysPressed;
 
-	*keypress = gKeysPressed[gNumKeysPressed];
+	*keypress = gKeysPressed[cur_key];
+
+	++cur_key;
 
 	return 0;
 }
