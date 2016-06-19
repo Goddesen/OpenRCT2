@@ -1043,7 +1043,7 @@ static const keypress _defaultShortcutKeys[SHORTCUT_COUNT] = {
 	SHORTCUT_UNDEFINED									// SHORTCUT_SEE_THROUGH_PATHS_TOGGLE
 };
 
-#define SHORTCUT_FILE_VERSION 1
+#define SHORTCUT_FILE_VERSION 2
 
 /**
  *
@@ -1074,11 +1074,13 @@ bool config_shortcut_keys_load()
 		result = SDL_RWread(file, &version, sizeof(version), 1) == 1;
 		if (result && version == SHORTCUT_FILE_VERSION) {
 			for (sint32 i = 0; i < SHORTCUT_COUNT; i++) {
-				if (SDL_RWread(file, &gShortcutKeys[i], sizeof(uint16), 1) != 1) {
+				if (SDL_RWread(file, &gShortcutKeys[i], sizeof(keypress), 1) != 1) {
 					break;
 				}
 			}
 		} else {
+			log_verbose("Shortcut config file is outdated (expected: %d, got %d). "\
+						"Loading default shorcut keys.", version, SHORTCUT_FILE_VERSION);
 			result = false;
 		}
 		SDL_RWclose(file);
