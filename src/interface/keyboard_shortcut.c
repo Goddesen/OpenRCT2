@@ -70,14 +70,14 @@ void keyboard_shortcut_handle(keypress key)
 	for (i = 0; i < SHORTCUT_COUNT; i++) {
 		if (platform_compare_keypress(key, gShortcutKeys[i])) {
 			keyboard_shortcut_handle_command(i);
-			break;
+			return;
 		}
 	}
 }
 
 void keyboard_shortcut_handle_command(int shortcutIndex)
 {
-	if (shortcutIndex >= 0 && shortcutIndex < countof(shortcut_table)) {
+	if (shortcutIndex >= 0 && shortcutIndex < SHORTCUT_COUNT) {
 		shortcut_action action = shortcut_table[shortcutIndex];
 		if (action != NULL) {
 			action();
