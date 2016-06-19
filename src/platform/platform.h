@@ -40,6 +40,8 @@
 #define KEYBOARD_PRIMARY_MODIFIER KMOD_CTRL
 #endif
 
+#define KEYBOARD_KEYPRESSES_PER_UPDATE 16
+
 #define INVALID_HANDLE -1
 
 #define TOUCH_DOUBLE_TIMEOUT 300
@@ -97,9 +99,15 @@ typedef struct file_dialog_desc {
 	} filters[8];
 } file_dialog_desc;
 
+typedef struct {
+	SDL_Keycode keycode;
+	uint16 mod;
+} keypress;
+
 extern openrct2_cursor gCursorState;
 extern const unsigned char *gKeysState;
-extern unsigned char *gKeysPressed;
+extern keypress *gKeysPressed;
+extern int gNumKeysPressed;
 extern unsigned int gLastKeyPressed;
 
 extern textinputbuffer gTextInput;
@@ -135,6 +143,8 @@ void platform_start_text_input(utf8 *buffer, int max_length);
 void platform_stop_text_input();
 void platform_get_date(rct2_date *out_date);
 void platform_get_time(rct2_time *out_time);
+#define platform_compare_keypress(k1, k2) (((k1).keycode == (k2).keycode) && (((k1).mod == (k2).mod)))
+#define platform_shortcut_is_undefined(k) platform_compare_keypress((k), SHORTCUT_UNDEFINED)
 
 // Platform specific definitions
 void platform_get_exe_path(utf8 *outPath);

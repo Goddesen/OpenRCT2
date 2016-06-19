@@ -38,13 +38,13 @@ static const shortcut_action shortcut_table[SHORTCUT_COUNT];
  *
  *  rct2: 0x006E3E91
  */
-void keyboard_shortcut_set(int key)
+void keyboard_shortcut_set(keypress key)
 {
 	int i;
 
 	// Unmap shortcut that already uses this key
 	for (i = 0; i < SHORTCUT_COUNT; i++) {
-		if (key == gShortcutKeys[i]) {
+		if (platform_compare_keypress(key, gShortcutKeys[i])) {
 			gShortcutKeys[i] = SHORTCUT_UNDEFINED;
 			break;
 		}
@@ -61,11 +61,11 @@ void keyboard_shortcut_set(int key)
  *
  *  rct2: 0x006E3E68
  */
-void keyboard_shortcut_handle(int key)
+void keyboard_shortcut_handle(keypress key)
 {
 	int i;
 	for (i = 0; i < SHORTCUT_COUNT; i++) {
-		if (key == gShortcutKeys[i]) {
+		if (platform_compare_keypress(key, gShortcutKeys[i])) {
 			keyboard_shortcut_handle_command(i);
 			break;
 		}
@@ -82,21 +82,23 @@ void keyboard_shortcut_handle_command(int shortcutIndex)
 	}
 }
 
-void keyboard_shortcut_format_string(char *buffer, uint16 shortcutKey)
+void keyboard_shortcut_format_string(char *buffer, keypress shortcut_key)
 {
 	char formatBuffer[256];
 
 	*buffer = 0;
-	if (shortcutKey == SHORTCUT_UNDEFINED) return;
-	if (shortcutKey & 0x100) {
+	if (platform_shortcut_is_undefined(shortcut_key))
+		return;
+
+	if (shortcut_key.mod & KMOD_SHIFT) {
 		format_string(formatBuffer, STR_SHIFT_PLUS, NULL);
 		strcat(buffer, formatBuffer);
 	}
-	if (shortcutKey & 0x200) {
+	if (shortcut_key.mod & KMOD_CTRL) {
 		format_string(formatBuffer, STR_CTRL_PLUS, NULL);
 		strcat(buffer, formatBuffer);
 	}
-	if (shortcutKey & 0x400) {
+	if (shortcut_key.mod & KMOD_ALT) {
 #ifdef __MACOSX__
 		format_string(formatBuffer, STR_OPTION_PLUS, NULL);
 #else
@@ -104,11 +106,11 @@ void keyboard_shortcut_format_string(char *buffer, uint16 shortcutKey)
 #endif
 		strcat(buffer, formatBuffer);
 	}
-	if (shortcutKey & 0x800) {
+	if (shortcut_key.mod & KMOD_GUI) {
 		format_string(formatBuffer, STR_CMD_PLUS, NULL);
 		strcat(buffer, formatBuffer);
 	}
-	strcat(buffer, SDL_GetScancodeName(shortcutKey & 0xFF));
+	strcat(buffer, SDL_GetKeyName(shortcut_key.keycode));
 }
 
 #pragma region Shortcut Commands
