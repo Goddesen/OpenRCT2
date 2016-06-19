@@ -429,7 +429,7 @@ void platform_process_messages()
 			if (e.key.keysym.sym == SDLK_KP_ENTER){
 				// Map Keypad enter to regular enter.
 				e.key.keysym.scancode = SDL_SCANCODE_RETURN;
-				e.key.keysym.sym = SDLK_ENTER;
+				e.key.keysym.sym = SDLK_RETURN;
 			}
 
 			gLastKeyPressed = e.key.keysym.sym;
