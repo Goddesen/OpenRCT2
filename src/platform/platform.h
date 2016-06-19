@@ -144,7 +144,7 @@ void platform_stop_text_input();
 void platform_get_date(rct2_date *out_date);
 void platform_get_time(rct2_time *out_time);
 #define platform_compare_keypress(k1, k2) (((k1).keycode == (k2).keycode) && (((k1).mod == (k2).mod)))
-#define platform_shortcut_is_undefined(k) platform_compare_keypress((k), SHORTCUT_UNDEFINED)
+#define platform_shortcut_is_undefined(k) platform_compare_keypress((k), (keypress)SHORTCUT_UNDEFINED)
 
 // Platform specific definitions
 void platform_get_exe_path(utf8 *outPath);

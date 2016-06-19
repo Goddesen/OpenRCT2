@@ -17,7 +17,7 @@
 #ifndef _INTERFACE_KEYBOARD_SHORTCUT_H_
 #define _INTERFACE_KEYBOARD_SHORTCUT_H_
 
-#define SHORTCUT_UNDEFINED ((keypress){ SDLK_UNKNOWN, KMOD_NONE })
+#define SHORTCUT_UNDEFINED { SDLK_UNKNOWN, KMOD_NONE }
 
 void keyboard_shortcut_set(keypress key);
 void keyboard_shortcut_handle(keypress key);

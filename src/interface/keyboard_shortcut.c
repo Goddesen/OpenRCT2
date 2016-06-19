@@ -45,7 +45,7 @@ void keyboard_shortcut_set(keypress key)
 	// Unmap shortcut that already uses this key
 	for (i = 0; i < SHORTCUT_COUNT; i++) {
 		if (platform_compare_keypress(key, gShortcutKeys[i])) {
-			gShortcutKeys[i] = SHORTCUT_UNDEFINED;
+			gShortcutKeys[i] = (keypress)SHORTCUT_UNDEFINED;
 			break;
 		}
 	}
