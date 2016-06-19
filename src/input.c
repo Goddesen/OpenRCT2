@@ -1519,12 +1519,18 @@ void game_handle_keyboard_input()
  */
 int get_next_key(keypress *keypress)
 {
-	if (gNumKeysPressed < 1)
+	static int cur_key = 0;
+
+	if (gNumKeysPressed < 1) {
+		cur_key = 0;
 		return -1;
+	}
 
 	--gNumKeysPressed;
 
-	*keypress = gKeysPressed[gNumKeysPressed];
+	*keypress = gKeysPressed[cur_key];
+
+	++cur_key;
 
 	return 0;
 }
