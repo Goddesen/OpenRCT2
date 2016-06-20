@@ -15,7 +15,6 @@
 #pragma endregion
 
 #include <stdarg.h>
-#include <SDL_scancode.h>
 
 #include "../addresses.h"
 #include "../drawing/drawing.h"
