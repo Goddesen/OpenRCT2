@@ -879,11 +879,6 @@ bool platform_check_shift(void)
 	return gModsHeld[SDLK_LSHIFT - SDLK_LCTRL] || gModsHeld[SDLK_RSHIFT - SDLK_LCTRL];
 }
 
-bool platform_check_mode(void)
-{
-	return gModsHeld[SDLK_MODE - SDLK_LCTRL];
-}
-
 /**
  * Filter / sanitize / override keypress before it is handled.
  */
