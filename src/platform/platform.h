@@ -145,13 +145,11 @@ void platform_stop_text_input();
 void platform_get_date(rct2_date *out_date);
 void platform_get_time(rct2_time *out_time);
 bool platform_keypress_equals(keypress k1, keypress k2);
-bool platform_keypress_in_update(keypress k);
 bool platform_check_alt(void);
 bool platform_check_ctrl(void);
 bool platform_check_gui(void);
 bool platform_check_shift(void);
-#define CHECK_PLACE_OBJECT_MOD_COPY_Z platform_check_ctrl()
-#define CHECK_PLACE_OBJECT_MOD_SHIFT_Z platform_check_shift()
+bool platform_check_mode(void);
 
 // Platform specific definitions
 void platform_get_exe_path(utf8 *outPath);

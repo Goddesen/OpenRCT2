@@ -93,8 +93,8 @@ void window_map_tooltip_update_visibility()
 
 	if (_cursorHoldDuration < 25 ||
 		stringId == STR_NONE ||
-		CHECK_PLACE_OBJECT_MOD_COPY_Z ||
-		CHECK_PLACE_OBJECT_MOD_SHIFT_Z ||
+		platform_check_ctrl() ||
+		platform_check_shift() ||
 		window_find_by_class(WC_ERROR) != NULL
 	) {
 		window_close_by_class(WC_MAP_TOOLTIP);

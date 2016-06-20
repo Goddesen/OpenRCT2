@@ -1439,7 +1439,7 @@ void game_handle_keyboard_input()
 	if (!gConsoleOpen) {
 		// Handle edge scrolling
 		if (gConfigGeneral.edge_scrolling && (gInputState == INPUT_STATE_NORMAL)) {
-			if (!(CHECK_PLACE_OBJECT_MOD_COPY_Z || CHECK_PLACE_OBJECT_MOD_SHIFT_Z)) {
+			if (!(platform_check_ctrl() || platform_check_shift())) {
 				game_handle_edge_scroll();
 			}
 		}
