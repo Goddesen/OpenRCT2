@@ -28,6 +28,9 @@ enum {
 	CONFIG_FLAG_SAVE_PLUGIN_DATA = (1 << 3)
 };
 
+#define SHORTCUT_UNDEFINED KEYBOARD_KEYPRESS_UNDEFINED
+#define SHORTCUT_NUM_HELD 4
+
 enum {
 	SHORTCUT_CLOSE_TOP_MOST_WINDOW,
 	SHORTCUT_CLOSE_ALL_FLOATING_WINDOWS,
@@ -298,10 +301,38 @@ typedef struct theme_features {
 	uint8 rct1_scenario_font;
 } theme_features;
 
-typedef struct shortcut_entry {
-	uint8 key;
-	uint8 modifier;
-} shortcut_entry;
+#define TITLE_SEQUENCE_MAX_SAVE_LENGTH 51
+
+typedef struct title_command {
+	uint8 command;
+	union {
+		uint8 saveIndex;	// LOAD (this index is internal only)
+		uint8 x;			// LOCATION
+		uint8 rotations;	// ROTATE (counter-clockwise)
+		uint8 zoom;			// ZOOM
+		uint8 speed;		// SPEED
+		uint8 seconds;		// WAIT
+	};
+	uint8 y;				// LOCATION
+} title_command;
+
+#define TITLE_SEQUENCE_NAME_SIZE 256
+
+typedef struct title_sequence {
+	char name[TITLE_SEQUENCE_NAME_SIZE];
+	char path[MAX_PATH]; // Needed for non-modifiable presets
+	char (*saves)[TITLE_SEQUENCE_MAX_SAVE_LENGTH];
+	title_command *commands;
+	uint8 num_saves;
+	uint16 num_commands;
+
+} title_sequence;
+
+typedef struct title_sequences_configuration {
+	title_sequence *presets;
+	uint16 num_presets;
+
+} title_sequences_configuration;
 
 extern general_configuration gConfigGeneral;
 extern interface_configuration gConfigInterface;
