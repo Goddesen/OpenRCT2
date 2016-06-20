@@ -1393,6 +1393,8 @@ void title_handle_keyboard_input()
 	rct_window *w;
 	keypress key;
 
+	gCurKeyNum = 0;
+
 	if (gOpenRCT2Headless) {
 		return;
 	}
@@ -1435,6 +1437,8 @@ void game_handle_keyboard_input()
 {
 	rct_window *w;
 	keypress key;
+
+	gCurKeyNum = 0;
 
 	if (!gConsoleOpen) {
 		// Handle edge scrolling
