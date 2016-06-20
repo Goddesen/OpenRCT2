@@ -68,7 +68,6 @@ static uint8 _currentScrollArea;
 
 uint8 gInputState;
 uint8 gInputFlags;
-uint8 gInputPlaceObjectModifier;
 
 sint32 gInputDragLastX;
 sint32 gInputDragLastY;
@@ -1398,22 +1397,6 @@ void title_handle_keyboard_input()
 		return;
 	}
 
-	if (!gConsoleOpen) {
-		// Handle modifier keys and key scrolling
-		gInputPlaceObjectModifier = PLACE_OBJECT_MODIFIER_NONE;
-		if (gKeysState[SDL_SCANCODE_LSHIFT] || gKeysState[SDL_SCANCODE_RSHIFT])
-			gInputPlaceObjectModifier |= PLACE_OBJECT_MODIFIER_SHIFT_Z;
-		if (gKeysState[SDL_SCANCODE_LCTRL] || gKeysState[SDL_SCANCODE_RCTRL])
-			gInputPlaceObjectModifier |= PLACE_OBJECT_MODIFIER_COPY_Z;
-		if (gKeysState[SDL_SCANCODE_LALT] || gKeysState[SDL_SCANCODE_RALT])
-			gInputPlaceObjectModifier |= 4;
-#ifdef __MACOSX__
-		if (gKeysState[SDL_SCANCODE_LGUI] || gKeysState[SDL_SCANCODE_RGUI]) {
-			gInputPlaceObjectModifier |= 8;
-		}
-#endif
-	}
-
 	while (get_next_key(&key) == 0) {
 
 		// Reserve backtick for console
@@ -1437,7 +1420,7 @@ void title_handle_keyboard_input()
 				window_text_input_key(w, key.keycode);
 			}
 			
-			if (platform_compare_keypress(key, gShortcutKeys[SHORTCUT_SCREENSHOT])) {
+			if (platform_keypress_equals(key, gShortcutKeys[SHORTCUT_SCREENSHOT])) {
 				keyboard_shortcut_handle_command(SHORTCUT_SCREENSHOT);
 			}
 		}
@@ -1454,32 +1437,16 @@ void game_handle_keyboard_input()
 	keypress key;
 
 	if (!gConsoleOpen) {
-		// Handle mouse scrolling
-		if (gInputState == INPUT_STATE_NORMAL && gConfigGeneral.edge_scrolling) {
-			if (!(gInputPlaceObjectModifier & (PLACE_OBJECT_MODIFIER_SHIFT_Z | PLACE_OBJECT_MODIFIER_COPY_Z))) {
+		// Handle edge scrolling
+		if (gConfigGeneral.edge_scrolling && (gInputState == INPUT_STATE_NORMAL)) {
+			if (!(CHECK_PLACE_OBJECT_MOD_COPY_Z || CHECK_PLACE_OBJECT_MOD_SHIFT_Z)) {
 				game_handle_edge_scroll();
 			}
 		}
 
-		// Handle modifier keys and key scrolling
-		gInputPlaceObjectModifier = PLACE_OBJECT_MODIFIER_NONE;
-		if (gKeysState[SDL_SCANCODE_LSHIFT] || gKeysState[SDL_SCANCODE_RSHIFT]) {
-			gInputPlaceObjectModifier |= PLACE_OBJECT_MODIFIER_SHIFT_Z;
-		}
-		if (gKeysState[SDL_SCANCODE_LCTRL] || gKeysState[SDL_SCANCODE_RCTRL]) {
-			gInputPlaceObjectModifier |= PLACE_OBJECT_MODIFIER_COPY_Z;
-		}
-		if (gKeysState[SDL_SCANCODE_LALT] || gKeysState[SDL_SCANCODE_RALT]) {
-			gInputPlaceObjectModifier |= 4;
-		}
-#ifdef __MACOSX__
-		if (gKeysState[SDL_SCANCODE_LGUI] || gKeysState[SDL_SCANCODE_RGUI]) {
-			gInputPlaceObjectModifier |= 8;
-		}
-#endif
+		// Handle keyboard scrolling
 		game_handle_key_scroll();
 	}
-
 
 	// Handle key input
 	while (!gOpenRCT2Headless && (get_next_key(&key) == 0)) {
@@ -1519,18 +1486,13 @@ void game_handle_keyboard_input()
  */
 int get_next_key(keypress *keypress)
 {
-	static int cur_key = 0;
 
-	if (gNumKeysPressed < 1) {
-		cur_key = 0;
+	if (gCurKeyNum >= gNumKeysPressed)
 		return -1;
-	}
 
-	--gNumKeysPressed;
+	*keypress = gKeysPressed[gCurKeyNum];
 
-	*keypress = gKeysPressed[cur_key];
-
-	++cur_key;
+	++gCurKeyNum;
 
 	return 0;
 }
@@ -1655,44 +1617,15 @@ void game_handle_key_scroll()
 	scrollX = 0;
 	scrollY = 0;
 
-	for (int shortcutId = SHORTCUT_SCROLL_MAP_UP; shortcutId <= SHORTCUT_SCROLL_MAP_RIGHT; ++shortcutId) {
-		keypress shortcutKey = gShortcutKeys[shortcutId];
+	if (gKeysHeld[0])
+		scrollY = -1;
+	else if (gKeysHeld[2])
+		scrollY = 1;
 
-		if (platform_shortcut_is_undefined(shortcutKey))
-			continue;
-		if (!gKeysState[SDL_GetScancodeFromKey(shortcutKey.keycode)])
-			continue;
-
-		if (shortcutKey.mod & KMOD_SHIFT) {
-			if (!gKeysState[SDL_SCANCODE_LSHIFT] && !gKeysState[SDL_SCANCODE_RSHIFT]) continue;
-		}
-		if (shortcutKey.mod & KMOD_CTRL) {
-			if (!gKeysState[SDL_SCANCODE_LCTRL] && !gKeysState[SDL_SCANCODE_RCTRL]) continue;
-		}
-		if (shortcutKey.mod & KMOD_ALT) {
-			if (!gKeysState[SDL_SCANCODE_LALT] && !gKeysState[SDL_SCANCODE_RALT]) continue;
-		}
-#ifdef __MACOSX__
-		if (shortcutKey.mod & KMOD_GUI) {
-			if (!gKeysState[SDL_SCANCODE_LGUI] && !gKeysState[SDL_SCANCODE_RGUI]) continue;
-		}
-#endif
-
-		switch (shortcutId) {
-		case SHORTCUT_SCROLL_MAP_UP:
-			scrollY = -1;
-			break;
-		case SHORTCUT_SCROLL_MAP_LEFT:
-			scrollX = -1;
-			break;
-		case SHORTCUT_SCROLL_MAP_DOWN:
-			scrollY = 1;
-			break;
-		case SHORTCUT_SCROLL_MAP_RIGHT:
-			scrollX = 1;
-			break;
-		}
-	}
+	if (gKeysHeld[1])
+		scrollX = -1;
+	else if (gKeysHeld[3])
+		scrollX = 1;
 
 	// Scroll viewport
 	if (scrollX != 0) {

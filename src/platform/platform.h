@@ -40,6 +40,7 @@
 #define KEYBOARD_PRIMARY_MODIFIER KMOD_CTRL
 #endif
 
+#define KEYBOARD_KEYPRESS_UNDEFINED { SDLK_UNKNOWN, KMOD_NONE }
 #define KEYBOARD_KEYPRESSES_PER_UPDATE 16
 
 #define INVALID_HANDLE -1
@@ -105,10 +106,11 @@ typedef struct {
 } keypress;
 
 extern openrct2_cursor gCursorState;
-extern const unsigned char *gKeysState;
 extern keypress *gKeysPressed;
+extern bool gKeysHeld[]; // Some shortcuts (map scroll) check if keys are held
 extern int gNumKeysPressed;
-extern unsigned int gLastKeyPressed;
+extern int gCurKeyNum;
+extern keypress gLastKeyPressed;
 
 extern textinputbuffer gTextInput;
 extern bool gTextInputCompositionActive;
@@ -138,13 +140,18 @@ void platform_toggle_windowed_mode();
 void platform_set_cursor(uint8 cursor);
 void platform_refresh_video();
 void platform_process_messages();
-int platform_scancode_to_rct_keycode(int sdl_key);
 void platform_start_text_input(utf8 *buffer, int max_length);
 void platform_stop_text_input();
 void platform_get_date(rct2_date *out_date);
 void platform_get_time(rct2_time *out_time);
-#define platform_compare_keypress(k1, k2) (((k1).keycode == (k2).keycode) && (((k1).mod == (k2).mod)))
-#define platform_shortcut_is_undefined(k) platform_compare_keypress((k), (keypress)SHORTCUT_UNDEFINED)
+bool platform_keypress_equals(keypress k1, keypress k2);
+bool platform_keypress_in_update(keypress k);
+bool platform_check_alt(void);
+bool platform_check_ctrl(void);
+bool platform_check_gui(void);
+bool platform_check_shift(void);
+#define CHECK_PLACE_OBJECT_MOD_COPY_Z platform_check_ctrl()
+#define CHECK_PLACE_OBJECT_MOD_SHIFT_Z platform_check_shift()
 
 // Platform specific definitions
 void platform_get_exe_path(utf8 *outPath);

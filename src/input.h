@@ -56,12 +56,6 @@ enum {
 	INPUT_FLAG_VIEWPORT_SCROLLING = (1 << 7)
 };
 
-enum {
-	PLACE_OBJECT_MODIFIER_NONE = 0,
-	PLACE_OBJECT_MODIFIER_SHIFT_Z = (1 << 0),
-	PLACE_OBJECT_MODIFIER_COPY_Z = (1 << 1),
-};
-
 typedef struct widget_ref {
 	rct_windowclass window_classification;
 	rct_windownumber window_number;
@@ -70,7 +64,6 @@ typedef struct widget_ref {
 
 extern uint8 gInputState;
 extern uint8 gInputFlags;
-extern uint8 gInputPlaceObjectModifier;
 
 extern sint32 gInputDragLastX;
 extern sint32 gInputDragLastY;

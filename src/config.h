@@ -28,6 +28,9 @@ enum {
 	CONFIG_FLAG_SAVE_PLUGIN_DATA = (1 << 3)
 };
 
+#define SHORTCUT_UNDEFINED KEYBOARD_KEYPRESS_UNDEFINED
+#define SHORTCUT_NUM_HELD 4
+
 enum {
 	SHORTCUT_CLOSE_TOP_MOST_WINDOW,
 	SHORTCUT_CLOSE_ALL_FLOATING_WINDOWS,
@@ -314,11 +317,6 @@ typedef struct title_sequences_configuration {
 	uint16 num_presets;
 
 } title_sequences_configuration;
-
-typedef struct shortcut_entry {
-	uint8 key;
-	uint8 modifier;
-} shortcut_entry;
 
 extern general_configuration gConfigGeneral;
 extern interface_configuration gConfigInterface;
