@@ -43,6 +43,9 @@
 #define KEYBOARD_KEYPRESS_UNDEFINED { SDLK_UNKNOWN, KMOD_NONE }
 #define KEYBOARD_KEYPRESSES_PER_UPDATE 16
 
+// Number of modifier keys - 2xA, 2xC, 2xGUI, 2xS
+#define MODS_NUM_HELD (SDLK_RGUI - SDLK_LCTRL + 1)
+
 #define INVALID_HANDLE -1
 
 #define TOUCH_DOUBLE_TIMEOUT 300
@@ -108,6 +111,7 @@ typedef struct {
 extern openrct2_cursor gCursorState;
 extern keypress *gKeysPressed;
 extern bool gKeysHeld[]; // Some shortcuts (map scroll) check if keys are held
+extern bool gModsHeld[];
 extern int gNumKeysPressed;
 extern int gCurKeyNum;
 extern keypress gLastKeyPressed;
@@ -149,7 +153,6 @@ bool platform_check_alt(void);
 bool platform_check_ctrl(void);
 bool platform_check_gui(void);
 bool platform_check_shift(void);
-bool platform_check_mode(void);
 
 // Platform specific definitions
 void platform_get_exe_path(utf8 *outPath);
