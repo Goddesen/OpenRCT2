@@ -1034,7 +1034,7 @@ static void sub_6E1F34(sint16 x, sint16 y, uint16 selected_scenery, sint16* grid
 		gSceneryShiftPressed = false;
 	} else {
 		if (!gSceneryCtrlPressed) {
-			if (gInputPlaceObjectModifier & PLACE_OBJECT_MODIFIER_COPY_Z) {
+			if (platform_check_ctrl()) {
 				// CTRL pressed
 				rct_map_element* map_element;
 				uint16 flags =
@@ -1053,14 +1053,14 @@ static void sub_6E1F34(sint16 x, sint16 y, uint16 selected_scenery, sint16* grid
 				}
 			}
 		} else {
-			if (!(gInputPlaceObjectModifier & PLACE_OBJECT_MODIFIER_COPY_Z)) {
+			if (!platform_check_ctrl()) {
 				// CTRL not pressed
 				gSceneryCtrlPressed = false;
 			}
 		}
 
 		if (!gSceneryShiftPressed) {
-			if (gInputPlaceObjectModifier & PLACE_OBJECT_MODIFIER_SHIFT_Z) {
+			if (platform_check_shift()) {
 				// SHIFT pressed
 				gSceneryShiftPressed = true;
 				gSceneryShiftPressX = x;
@@ -1069,7 +1069,7 @@ static void sub_6E1F34(sint16 x, sint16 y, uint16 selected_scenery, sint16* grid
 			}
 		}
 		else{
-			if (gInputPlaceObjectModifier & PLACE_OBJECT_MODIFIER_SHIFT_Z) {
+			if (platform_check_shift()) {
 				// SHIFT pressed
 				gSceneryShiftPressZOffset = (gSceneryShiftPressY - y + 4) & 0xFFF8;
 

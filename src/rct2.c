@@ -157,7 +157,6 @@ int rct2_init()
 
 	config_reset_shortcut_keys();
 	config_shortcut_keys_load();
-	gInputPlaceObjectModifier = PLACE_OBJECT_MODIFIER_NONE;
 	// config_load();
 
 	gfx_load_g1();
