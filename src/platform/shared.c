@@ -451,13 +451,13 @@ void platform_process_messages()
 				// Handle only KEYBOARD_KEYPRESSES_PER_UPDATE keypresses per update
 				gKeysPressed[gNumKeysPressed] = gLastKeyPressed;
 				++gNumKeysPressed;
-				log_verbose("%s: keypress: sym:0x%08x mod:0x%08x, #:%2d", __func__, e.key.keysym.sym, e.key.keysym.mod, gNumKeysPressed);
 			}
 
 			// Handle shortcut keys that can be held
 			for (int i = 0; i < 4; ++i) {
+				// NOTE: Must compare entire keypress (not just keycode) to
+				// account for shortcuts with modifiers
 				if (platform_keypress_equals(key, gShortcutKeys[SHORTCUT_SCROLL_MAP_UP + i])) {
-					log_verbose("Depressed held key: %d", i);
 					gKeysHeld[i] = true;
 					break;
 				}
@@ -545,7 +545,6 @@ void platform_process_messages()
 			// Held shortcuts
 			for (int i = 0; i < SHORTCUT_NUM_HELD; ++i) {
 				if (platform_keypress_equals(key, gShortcutKeys[SHORTCUT_SCROLL_MAP_UP + i])) {
-					log_verbose("Released held key: %d", i);
 					gKeysHeld[i] = false;
 					break;
 				}
@@ -853,7 +852,6 @@ uint8 platform_get_currency_value(const char *currCode) {
 
 bool platform_keypress_equals(keypress k1, keypress k2)
 {
-	log_verbose("Comparing keypress (%s, 0x%04x) == (%s, 0x%04x)", SDL_GetKeyName(k1.keycode), k1.mod, SDL_GetKeyName(k2.keycode), k2.mod);
 	return (k1.keycode == k2.keycode) && (k1.mod == k2.mod);
 }
 
