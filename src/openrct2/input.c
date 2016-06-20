@@ -1499,14 +1499,12 @@ void game_handle_keyboard_input()
  */
 sint32 get_next_key(keypress *keypress)
 {
-
 	if (gCurKeyNum >= gNumKeysPressed)
 		return -1;
 
 	*keypress = gKeysPressed[gCurKeyNum];
 
 	++gCurKeyNum;
-
 	return 0;
 }
 
