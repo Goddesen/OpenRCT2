@@ -37,6 +37,7 @@ typedef void(*update_palette_func)(const uint8*, int, int);
 
 openrct2_cursor gCursorState;
 bool gKeysHeld[SHORTCUT_NUM_HELD] = { 0 };
+bool gModsHeld[MODS_NUM_HELD] = { 0 };
 keypress *gKeysPressed;
 int gNumKeysPressed;
 int gCurKeyNum;
@@ -293,6 +294,8 @@ void platform_process_messages()
 	gLastKeyPressed = key;
 	gNumKeysPressed = 0;
 
+	int mod_held_idx;
+
 	// gCursorState.wheel = 0;
 	gCursorState.left &= ~CURSOR_CHANGED;
 	gCursorState.middle &= ~CURSOR_CHANGED;
@@ -334,8 +337,8 @@ void platform_process_messages()
 
 			if (e.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
 				// Reset held keys to make up for lost KEYUP events to clear them while unfocused
-				for (int i = 0; i < SHORTCUT_NUM_HELD; ++i)
-					gKeysHeld[i] = false;
+				memset(gKeysHeld, 0x0, sizeof(gKeysHeld));
+				memset(gModsHeld, 0x0, sizeof(gModsHeld));
 			}
 
 			break;
@@ -460,6 +463,11 @@ void platform_process_messages()
 				}
 			}
 
+			// Handle modifiers
+			mod_held_idx = key.keycode - SDLK_LCTRL;
+			if ((mod_held_idx >= 0) && (mod_held_idx < MODS_NUM_HELD))
+				gModsHeld[mod_held_idx] = true;
+
 			// Case done if we are not in text input mode
 			if (gTextInput.buffer == NULL)
 				break;
@@ -533,6 +541,8 @@ void platform_process_messages()
 			// Handle keyup for held keys
 			key = (keypress){ e.key.keysym.sym, e.key.keysym.mod };
 			platform_filter_keypress(&key);
+
+			// Held shortcuts
 			for (int i = 0; i < SHORTCUT_NUM_HELD; ++i) {
 				if (platform_keypress_equals(key, gShortcutKeys[SHORTCUT_SCROLL_MAP_UP + i])) {
 					log_verbose("Released held key: %d", i);
@@ -540,6 +550,11 @@ void platform_process_messages()
 					break;
 				}
 			}
+
+			// Modifiers
+			mod_held_idx = key.keycode - SDLK_LCTRL;
+			if ((mod_held_idx >= 0) && (mod_held_idx < MODS_NUM_HELD))
+				gModsHeld[mod_held_idx] = false;
 
 			break;
 		case SDL_MULTIGESTURE:
@@ -838,17 +853,8 @@ uint8 platform_get_currency_value(const char *currCode) {
 
 bool platform_keypress_equals(keypress k1, keypress k2)
 {
+	log_verbose("Comparing keypress (%s, 0x%04x) == (%s, 0x%04x)", SDL_GetKeyName(k1.keycode), k1.mod, SDL_GetKeyName(k2.keycode), k2.mod);
 	return (k1.keycode == k2.keycode) && (k1.mod == k2.mod);
-}
-
-bool platform_keypress_in_update(keypress k)
-{
-	for (int i = 0; i < gNumKeysPressed; ++i) {
-		if (platform_keypress_equals(k, gKeysPressed[i]))
-			return true;
-	}
-
-	return false;
 }
 
 /**
@@ -857,30 +863,27 @@ bool platform_keypress_in_update(keypress k)
  */
 bool platform_check_alt(void)
 {
-	return (gLastKeyPressed.keycode == SDLK_LALT) ||
-		   (gLastKeyPressed.keycode == SDLK_RALT) ||
-		   (gLastKeyPressed.mod & KMOD_ALT);
+	return gModsHeld[SDLK_LALT - SDLK_LCTRL] || gModsHeld[SDLK_RALT - SDLK_LCTRL];
 }
 
 bool platform_check_ctrl(void)
 {
-	return (gLastKeyPressed.keycode == SDLK_LCTRL) ||
-		   (gLastKeyPressed.keycode == SDLK_RCTRL) ||
-		   (gLastKeyPressed.mod & KMOD_CTRL);
+	return gModsHeld[SDLK_LCTRL - SDLK_LCTRL] || gModsHeld[SDLK_RCTRL - SDLK_LCTRL];
 }
 
 bool platform_check_gui(void)
 {
-	return (gLastKeyPressed.keycode == SDLK_LGUI) ||
-		   (gLastKeyPressed.keycode == SDLK_RGUI) ||
-		   (gLastKeyPressed.mod & KMOD_GUI);
+	return gModsHeld[SDLK_LGUI - SDLK_LCTRL] || gModsHeld[SDLK_RGUI - SDLK_LCTRL];
 }
 
 bool platform_check_shift(void)
 {
-	return (gLastKeyPressed.keycode == SDLK_LSHIFT) ||
-		   (gLastKeyPressed.keycode == SDLK_RSHIFT) ||
-		   (gLastKeyPressed.mod & KMOD_SHIFT);
+	return gModsHeld[SDLK_LSHIFT - SDLK_LCTRL] || gModsHeld[SDLK_RSHIFT - SDLK_LCTRL];
+}
+
+bool platform_check_mode(void)
+{
+	return gModsHeld[SDLK_MODE - SDLK_LCTRL];
 }
 
 /**

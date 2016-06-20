@@ -43,6 +43,8 @@
 #define KEYBOARD_KEYPRESS_UNDEFINED { SDLK_UNKNOWN, KMOD_NONE }
 #define KEYBOARD_KEYPRESSES_PER_UPDATE 16
 
+#define MODS_NUM_HELD (SDLK_MODE - SDLK_LCTRL)
+
 #define INVALID_HANDLE -1
 
 #define TOUCH_DOUBLE_TIMEOUT 300
@@ -108,6 +110,7 @@ typedef struct {
 extern openrct2_cursor gCursorState;
 extern keypress *gKeysPressed;
 extern bool gKeysHeld[]; // Some shortcuts (map scroll) check if keys are held
+extern bool gModsHeld[];
 extern int gNumKeysPressed;
 extern int gCurKeyNum;
 extern keypress gLastKeyPressed;
