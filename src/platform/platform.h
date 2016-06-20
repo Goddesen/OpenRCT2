@@ -44,7 +44,7 @@
 #define KEYBOARD_KEYPRESSES_PER_UPDATE 16
 
 // Number of modifier keys - 2xA, 2xC, 2xGUI, 2xS
-#define MODS_NUM_HELD (SDLK_RGUI - SDLK_LCTRL)
+#define MODS_NUM_HELD (SDLK_RGUI - SDLK_LCTRL + 1)
 
 #define INVALID_HANDLE -1
 
