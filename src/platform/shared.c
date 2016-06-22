@@ -445,8 +445,10 @@ void platform_process_messages()
 				break;
 
 			// We don't want repeat events (repeats from key being held down)
-			if (e.key.repeat)
+			if (e.key.repeat) {
+				log_verbose("Repeat key: (0x%08x, 0x%02x)", e.key.keysym.sym, e.key.keysym.mod);
 				break;
+			}
 
 			// Ignore unknown keys
 			if ((e.key.keysym.sym & ~(1<<30)) == SDLK_UNKNOWN)
