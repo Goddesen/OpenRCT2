@@ -1462,10 +1462,14 @@ void game_handle_keyboard_input()
 				console_toggle();
 			}
 			continue;
-		} else if (gConsoleOpen) {
+		}
+
+		if (gConsoleOpen) {
 			console_input(key.keycode);
 			continue;
-		} else if (gChatOpen) {
+		}
+
+		if (gChatOpen) {
 			chat_input(key.keycode);
 			continue;
 		}
@@ -1473,13 +1477,17 @@ void game_handle_keyboard_input()
 		w = window_find_by_class(WC_CHANGE_KEYBOARD_SHORTCUT);
 		if (w != NULL) {
 			keyboard_shortcut_set(key);
-		} else {
-			w = window_find_by_class(WC_TEXTINPUT);
-			if (w != NULL) {
-				window_text_input_key(w, key.keycode);
-			} else if (!gUsingWidgetTextBox) {
-				keyboard_shortcut_handle(key);
-			}
+			continue;
+		}
+
+		w = window_find_by_class(WC_TEXTINPUT);
+		if (w != NULL) {
+			window_text_input_key(w, key.keycode);
+			continue;
+		}
+
+		if (!gUsingWidgetTextBox) {
+			keyboard_shortcut_handle(key);
 		}
 	}
 }
@@ -1494,6 +1502,8 @@ int get_next_key(keypress *keypress)
 		return -1;
 
 	*keypress = gKeysPressed[gCurKeyNum];
+
+	log_verbose("%s: sym:0x%08x, mod:0x%02x, cur_num:%2d", __func__, keypress->keycode, keypress->mod, gCurKeyNum);
 
 	++gCurKeyNum;
 	return 0;

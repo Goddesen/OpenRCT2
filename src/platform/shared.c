@@ -448,8 +448,31 @@ void platform_process_messages()
 			if (e.key.repeat)
 				break;
 
+			// Ignore unknown keys
+			if (e.key.keysym.sym == SDLK_UNKNOWN)
+				break;
+
+#if 0
+#ifdef __LINUX__
+			if (e.key.keysym.scancode == SDL_SCANCODE_RALT)
+				e.key.keysym.sym = SDLK_RALT; // Force correct handling of SDLK_RALT on linux
+#endif
+#endif
+
+			log_verbose("scan: 0x%08x", e.key.keysym.scancode);
+
 			key = (keypress){ e.key.keysym.sym, e.key.keysym.mod };
 			platform_filter_keypress(&key);
+
+			// Handle modifiers
+			mod_held_idx = key.keycode - SDLK_LCTRL;
+			if ((mod_held_idx >= 0) && (mod_held_idx < MODS_NUM_HELD)) {
+				gModsHeld[mod_held_idx] = true;
+				break;
+			}
+			// Ignore MODE mode (for global modifier state)
+			if (key.keycode == SDLK_MODE)
+				break;
 
 			gLastKeyPressed = key;
 
@@ -466,11 +489,6 @@ void platform_process_messages()
 					break;
 				}
 			}
-
-			// Handle modifiers
-			mod_held_idx = key.keycode - SDLK_LCTRL;
-			if ((mod_held_idx >= 0) && (mod_held_idx < MODS_NUM_HELD))
-				gModsHeld[mod_held_idx] = true;
 
 			// Case done if we are not in text input mode
 			if (gTextInput.buffer == NULL)
@@ -894,8 +912,18 @@ static void platform_filter_keypress(keypress *key)
 		key->keycode = SDLK_RETURN;
 	}
 
-	// Only capture relevant modifiers
+	// Filter out unwanted modifiers
 	key->mod &= (KMOD_ALT | KMOD_CTRL | KMOD_GUI | KMOD_MODE | KMOD_SHIFT);
+
+	// Don't distinguish between L/R modifier
+	if (key->mod & KMOD_ALT)
+		key->mod |= KMOD_ALT;
+	if (key->mod & KMOD_CTRL)
+		key->mod |= KMOD_CTRL;
+	if (key->mod & KMOD_GUI)
+		key->mod |= KMOD_GUI;
+	if (key->mod & KMOD_SHIFT)
+		key->mod |= KMOD_SHIFT;
 }
 
 static inline void platform_map_keys_stack_insert(int val)
