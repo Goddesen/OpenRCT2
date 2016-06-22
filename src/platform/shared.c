@@ -36,8 +36,8 @@
 typedef void(*update_palette_func)(const uint8*, int, int);
 
 openrct2_cursor gCursorState;
-bool gKeysHeld[SHORTCUT_NUM_HELD] = { 0 };
 bool gModsHeld[MODS_NUM_HELD] = { 0 };
+int gMapKeysStack[4] = { 0 };
 keypress *gKeysPressed;
 int gNumKeysPressed;
 int gCurKeyNum;
@@ -72,6 +72,8 @@ static void platform_load_cursors();
 static void platform_unload_cursors();
 
 static void platform_filter_keypress(keypress *key);
+static inline void platform_map_keys_stack_insert(int val);
+static inline void platform_map_keys_stack_remove(int val);
 
 int resolution_sort_func(const void *pa, const void *pb)
 {
@@ -336,8 +338,8 @@ void platform_process_messages()
 			}
 
 			if (e.window.event == SDL_WINDOWEVENT_FOCUS_LOST) {
-				// Reset held keys to make up for lost KEYUP events to clear them while unfocused
-				memset(gKeysHeld, 0x0, sizeof(gKeysHeld));
+				// Reset held keys to make up for lost KEYUP events during lost focus
+				memset(gMapKeysStack, 0x0, sizeof(gMapKeysStack));
 				memset(gModsHeld, 0x0, sizeof(gModsHeld));
 			}
 
@@ -442,6 +444,10 @@ void platform_process_messages()
 			if (gTextInputCompositionActive)
 				break;
 
+			// We don't want repeat events (repeats from key being held down)
+			if (e.key.repeat)
+				break;
+
 			key = (keypress){ e.key.keysym.sym, e.key.keysym.mod };
 			platform_filter_keypress(&key);
 
@@ -453,12 +459,10 @@ void platform_process_messages()
 				++gNumKeysPressed;
 			}
 
-			// Handle shortcut keys that can be held
-			for (int i = 0; i < 4; ++i) {
-				// NOTE: Must compare entire keypress (not just keycode) to
-				// account for shortcuts with modifiers
-				if (platform_keypress_equals(key, gShortcutKeys[SHORTCUT_SCROLL_MAP_UP + i])) {
-					gKeysHeld[i] = true;
+			// Handle map scrolling keys
+			for (int i = SHORTCUT_SCROLL_MAP_UP; i <= SHORTCUT_SCROLL_MAP_RIGHT; ++i) {
+				if (platform_keypress_equals(key, gShortcutKeys[i])) {
+					platform_map_keys_stack_insert(i);
 					break;
 				}
 			}
@@ -542,10 +546,11 @@ void platform_process_messages()
 			key = (keypress){ e.key.keysym.sym, e.key.keysym.mod };
 			platform_filter_keypress(&key);
 
-			// Held shortcuts
-			for (int i = 0; i < SHORTCUT_NUM_HELD; ++i) {
-				if (platform_keypress_equals(key, gShortcutKeys[SHORTCUT_SCROLL_MAP_UP + i])) {
-					gKeysHeld[i] = false;
+			// Held map scroll keys
+			// (Discard modifier, user might have released it while holding)
+			for (int i = SHORTCUT_SCROLL_MAP_UP; i <= SHORTCUT_SCROLL_MAP_RIGHT; ++i) {
+				if (key.keycode == gShortcutKeys[i].keycode) {
+					platform_map_keys_stack_remove(i);
 					break;
 				}
 			}
@@ -891,4 +896,38 @@ static void platform_filter_keypress(keypress *key)
 
 	// Only capture relevant modifiers
 	key->mod &= (KMOD_ALT | KMOD_CTRL | KMOD_GUI | KMOD_MODE | KMOD_SHIFT);
+}
+
+static inline void platform_map_keys_stack_insert(int val)
+{
+	int i;
+
+	for (i = 0; i < 3; ++i) {
+		if (val == gMapKeysStack[i] ) {
+			break;
+		}
+	}
+
+	for (int j = i; j > 0; --j) {
+		gMapKeysStack[j] = gMapKeysStack[j-1];
+	}
+
+	gMapKeysStack[0] = val;
+}
+
+static inline void platform_map_keys_stack_remove(int val)
+{
+	int i;
+
+	for (i = 0; i < 3; ++i) {
+		if (val == gMapKeysStack[i]) {
+			break;
+		}
+	}
+
+	for (int j = i; j < 3; ++j) {
+		gMapKeysStack[j] = gMapKeysStack[j+1];
+	}
+
+	gMapKeysStack[3] = 0;
 }

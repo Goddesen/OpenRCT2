@@ -110,7 +110,7 @@ typedef struct {
 
 extern openrct2_cursor gCursorState;
 extern keypress *gKeysPressed;
-extern bool gKeysHeld[]; // Some shortcuts (map scroll) check if keys are held
+extern int gMapKeysStack[]; // State for map scroll shortcut keys
 extern bool gModsHeld[];
 extern int gNumKeysPressed;
 extern int gCurKeyNum;

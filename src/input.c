@@ -1613,21 +1613,28 @@ void game_handle_key_scroll()
 	rct_window *textWindow;
 
 	textWindow = window_find_by_class(WC_TEXTINPUT);
-	if (textWindow || gUsingWidgetTextBox) return;
-	if (gChatOpen) return;
+	if (textWindow || gUsingWidgetTextBox)
+		return;
+	if (gChatOpen)
+		return;
 
 	scrollX = 0;
 	scrollY = 0;
 
-	if (gKeysHeld[0])
-		scrollY = -1;
-	else if (gKeysHeld[2])
-		scrollY = 1;
-
-	if (gKeysHeld[1])
-		scrollX = -1;
-	else if (gKeysHeld[3])
-		scrollX = 1;
+	for (int i = 0; i < 4 && gMapKeysStack[i] != 0; i++) {
+		int val = gMapKeysStack[i];
+		if (val == SHORTCUT_SCROLL_MAP_UP || val == SHORTCUT_SCROLL_MAP_DOWN) {
+			scrollY = val - SHORTCUT_SCROLL_MAP_UP - 1;
+			break;
+		}
+	}
+	for (int i = 0; i < 4 && gMapKeysStack[i] != 0; i++) {
+		int val = gMapKeysStack[i];
+		if (val == SHORTCUT_SCROLL_MAP_LEFT || val == SHORTCUT_SCROLL_MAP_RIGHT) {
+			scrollX = val - SHORTCUT_SCROLL_MAP_LEFT - 1;
+			break;
+		}
+	}
 
 	// Scroll viewport
 	if (scrollX != 0) {
