@@ -449,15 +449,8 @@ void platform_process_messages()
 				break;
 
 			// Ignore unknown keys
-			if (e.key.keysym.sym == SDLK_UNKNOWN)
+			if ((e.key.keysym.sym & ~(1<<30)) == SDLK_UNKNOWN)
 				break;
-
-#if 0
-#ifdef __LINUX__
-			if (e.key.keysym.scancode == SDL_SCANCODE_RALT)
-				e.key.keysym.sym = SDLK_RALT; // Force correct handling of SDLK_RALT on linux
-#endif
-#endif
 
 			log_verbose("scan: 0x%08x", e.key.keysym.scancode);
 
