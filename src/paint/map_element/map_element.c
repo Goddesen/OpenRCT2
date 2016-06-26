@@ -343,13 +343,16 @@ const uint16 segment_offsets[9] = {
 
 void paint_util_set_segment_support_height(int segments, uint16 height, uint8 slope)
 {
-	for (int s = 0; s < 9; s++) {
-		if (segments & segment_offsets[s]) {
-			RCT2_GLOBAL(0x0141E9B4 + s * 4, uint16) = height;
-			if (height != 0xFFFF) {
-				RCT2_GLOBAL(0x0141E9B6 + s * 4, uint8) = slope;
+	if (height != 0xFFFF) {
+		// Might not work for big-endian
+		uint32 tmp = ((uint32)height << 16) | ((uint32)slope << 8);
+		for (int s = 0; s < countof(segment_offsets); s++) {
+			if (segments & segment_offsets[s]) {
+				RCT2_GLOBAL(0x0141E9B6 + s * 4, uint32) = tmp;
 			}
 		}
+	} else {
+		paint_util_set_segment_support_invalid_height(segments);
 	}
 }
 
@@ -357,16 +360,16 @@ void paint_util_set_segment_support_invalid_height(int segments)
 {
 	for (int s = 0; s < countof(segment_offsets); s++) {
 		if (segments & segment_offsets[s]) {
-			RCT2_GLOBAL(0x0141E9B4 + s * 4, uint16) = 0xFFFF;
+			// Overwrite slope var and padding(?)
+			RCT2_GLOBAL(0x0141E9B4 + s * 4, uint32) = 0xFFFFFFFF;
 		}
 	}
 }
 
 void paint_util_set_all_segments_support_invalid_height(void)
 {
-	for (int s = 0; s < countof(segment_offsets); s++) {
-		RCT2_GLOBAL(0x0141E9B4 + s * 4, uint16) = 0xFFFF;
-	}
+	// Overwrite slope var and padding(?)
+	memset((void *)0x0141E9B4, 0xFF, countof(segment_offsets) * 4);
 }
 
 uint16 paint_util_rotate_segments(uint16 segments, uint8 rotation)
