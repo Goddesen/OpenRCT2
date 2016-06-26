@@ -133,7 +133,7 @@ static void paint_space_rings(uint8 rideIndex, uint8 trackSequence, uint8 direct
 		case 8: cornerSegments = SEGMENT_B8 | SEGMENT_D0 | SEGMENT_C0; break;
 	}
 	paint_util_set_segment_support_height(cornerSegments, height + 2, 0x20);
-	paint_util_set_segment_support_height(SEGMENTS_ALL & ~cornerSegments, 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(SEGMENTS_ALL & ~cornerSegments);
 	paint_util_set_general_support_height(height + 48, 0x20);
 }
 

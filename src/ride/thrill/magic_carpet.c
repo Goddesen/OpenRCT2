@@ -212,7 +212,7 @@ static void paint_magic_carpet(uint8 rideIndex, uint8 trackSequence, uint8 direc
 	case 1: paint_magic_carpet_structure(ride, direction,  48, height); break;
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 176, 0x20);
 }
 

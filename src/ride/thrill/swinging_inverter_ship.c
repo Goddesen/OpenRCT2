@@ -163,7 +163,7 @@ static void paint_swinging_inverter_ship(uint8 rideIndex, uint8 trackSequence, u
 		case 3: paint_swinging_inverter_ship_structure(ride, direction, -48, height + 7); break;
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 176, 0x20);
 }
 

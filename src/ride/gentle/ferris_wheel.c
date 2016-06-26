@@ -173,7 +173,7 @@ static void paint_ferris_wheel(uint8 rideIndex, uint8 trackSequence, uint8 direc
 		case 3: paint_ferris_wheel_structure(rideIndex, direction, -48, height); break;
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 176, 0x20);
 }
 

@@ -53,7 +53,7 @@ void scenery_multiple_paint_supports(uint8 direction, uint16 height, rct_map_ele
 	if (tile->var_7 & 0x40) {
 		paint_util_set_segment_support_height(SEGMENTS_ALL, clearanceHeight, 0x20);
 	} else {
-		paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+		paint_util_set_all_segments_support_invalid_height();
 	}
 
 	paint_util_set_general_support_height(clearanceHeight, 0x20);

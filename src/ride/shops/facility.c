@@ -64,7 +64,7 @@ static void facility_paint_setup(uint8 rideIndex, uint8 trackSequence, uint8 dir
 		sub_98197C(imageId, 0, 0, 28, 2, 29, height, 2, 28, height, rotation);
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 

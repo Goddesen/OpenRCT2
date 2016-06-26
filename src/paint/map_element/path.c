@@ -779,31 +779,31 @@ void loc_6A37C9(rct_map_element * mapElement, int height, rct_footpath_entry * f
 	if ((mapElement->type & 1)
 	    || (mapElement->properties.path.edges != 0xFF && hasFences)
 		) {
-		paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+		paint_util_set_all_segments_support_invalid_height();
 		return;
 	}
 
 	if (mapElement->properties.path.edges == 0xFF) {
-		paint_util_set_segment_support_height(SEGMENT_C8 | SEGMENT_CC | SEGMENT_D0 | SEGMENT_D4, 0xFFFF, 0);
+		paint_util_set_segment_support_invalid_height(SEGMENT_C8 | SEGMENT_CC | SEGMENT_D0 | SEGMENT_D4);
 		return;
 	}
 
-	paint_util_set_segment_support_height(SEGMENT_C4, 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(SEGMENT_C4);
 
 	if (edges & 1) {
-		paint_util_set_segment_support_height(SEGMENT_CC, 0xFFFF, 0);
+		paint_util_set_segment_support_invalid_height(SEGMENT_CC);
 	}
 
 	if (edges & 2) {
-		paint_util_set_segment_support_height(SEGMENT_D4, 0xFFFF, 0);
+		paint_util_set_segment_support_invalid_height(SEGMENT_D4);
 	}
 
 	if (edges & 4) {
-		paint_util_set_segment_support_height(SEGMENT_D0, 0xFFFF, 0);
+		paint_util_set_segment_support_invalid_height(SEGMENT_D0);
 	}
 
 	if (edges & 8) {
-		paint_util_set_segment_support_height(SEGMENT_C8, 0xFFFF, 0);
+		paint_util_set_segment_support_invalid_height(SEGMENT_C8);
 	}
 }
 
@@ -884,31 +884,31 @@ void loc_6A3B57(rct_map_element* mapElement, sint16 height, rct_footpath_entry* 
 	paint_util_set_general_support_height(support_height, 0x20);
 	
 	if (footpath_element_is_queue(mapElement) || (hasFences && perimeter != 0xFF)) {
-		paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+		paint_util_set_all_segments_support_invalid_height();
 		return;
 	}
 
 	if (perimeter == 0xFF) {
-		paint_util_set_segment_support_height(SEGMENT_C8 | SEGMENT_CC | SEGMENT_D0 | SEGMENT_D4, 0xFFFF, 0);
+		paint_util_set_segment_support_invalid_height(SEGMENT_C8 | SEGMENT_CC | SEGMENT_D0 | SEGMENT_D4);
 		return;
 	}
 
-	paint_util_set_segment_support_height(SEGMENT_C4, 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(SEGMENT_C4);
 
 	if (edges & 1) {
-		paint_util_set_segment_support_height(SEGMENT_CC, 0xFFFF, 0);
+		paint_util_set_segment_support_invalid_height(SEGMENT_CC);
 	}
 
 	if (edges & 2) {
-		paint_util_set_segment_support_height(SEGMENT_D4, 0xFFFF, 0);
+		paint_util_set_segment_support_invalid_height(SEGMENT_D4);
 	}
 
 	if (edges & 4) {
-		paint_util_set_segment_support_height(SEGMENT_D0, 0xFFFF, 0);
+		paint_util_set_segment_support_invalid_height(SEGMENT_D0);
 	}
 
 	if (edges & 8) {
-		paint_util_set_segment_support_height(SEGMENT_C8, 0xFFFF, 0);
+		paint_util_set_segment_support_invalid_height(SEGMENT_C8);
 	}
 
 }

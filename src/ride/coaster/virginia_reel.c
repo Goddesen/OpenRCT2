@@ -248,7 +248,7 @@ static void paint_virginia_reel_track_flat(uint8 rideIndex, uint8 trackSequence,
 
 	wooden_a_supports_paint_setup((direction & 1), 0, height, RCT2_GLOBAL(0x00F4419C, uint32), NULL);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -292,7 +292,7 @@ static void paint_virginia_reel_track_25_deg_up(uint8 rideIndex, uint8 trackSequ
 			break;
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 56, 0x20);
 }
 
@@ -337,7 +337,7 @@ static void paint_virginia_reel_track_flat_to_25_deg_up(uint8 rideIndex, uint8 t
 
 	wooden_a_supports_paint_setup((direction & 1), 0, height, RCT2_GLOBAL(0x00F4419C, uint32), NULL);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 48, 0x20);
 }
 
@@ -381,7 +381,7 @@ static void paint_virginia_reel_track_25_deg_up_to_flat(uint8 rideIndex, uint8 t
 			break;
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 40, 0x20);
 }
 
@@ -429,7 +429,7 @@ static void paint_virginia_reel_station(uint8 rideIndex, uint8 trackSequence, ui
 	wooden_a_supports_paint_setup((direction & 1), 0, height, RCT2_GLOBAL(0x00F4419C, uint32), NULL);
 	track_paint_util_draw_station(rideIndex, trackSequence, direction, height, mapElement);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -443,12 +443,12 @@ static void paint_virginia_reel_track_left_quarter_turn_3_tiles(uint8 rideIndex,
 
 	switch (trackSequence) {
 		case 2:
-			paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_C8 | SEGMENT_C4 | SEGMENT_D0 | SEGMENT_B8, direction), 0xFFFF, 0);
+			paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_C8 | SEGMENT_C4 | SEGMENT_D0 | SEGMENT_B8, direction));
 			break;
 		case 0:
 		case 3:
 			wooden_a_supports_paint_setup(virginia_reel_left_quarter_turn_supports[direction], 0, height, RCT2_GLOBAL(0x00F4419C, uint32), NULL);
-			paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENTS_ALL, direction), 0xFFFF, 0);
+			paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENTS_ALL, direction));
 			break;
 	}
 
@@ -488,7 +488,7 @@ static void paint_virginia_reel_track_left_quarter_turn_1_tile(uint8 rideIndex, 
 			break;
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 

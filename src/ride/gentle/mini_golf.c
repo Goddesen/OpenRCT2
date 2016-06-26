@@ -423,7 +423,7 @@ static void paint_mini_golf_track_flat(uint8 rideIndex, uint8 trackSequence, uin
 	}
 
 	metal_a_supports_paint_setup(3, 4, 0, height, RCT2_GLOBAL(0x00F4419C, uint32));
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 
 	if (mini_golf_paint_util_should_draw_fence(mapElement)) {
 		if (direction & 1) {
@@ -453,7 +453,7 @@ static void paint_mini_golf_track_25_deg_up(uint8 rideIndex, uint8 trackSequence
 	mini_golf_paint_util_7c(direction, imageId, 0, 0, 32, 20, 1, height, 0, 6, height, get_current_rotation());
 
 	metal_a_supports_paint_setup(3, 4, 8, height, RCT2_GLOBAL(0x00F4419C, uint32));
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 
 	imageId = mini_golf_track_sprites_25_deg_up[direction][1] | RCT2_GLOBAL(0x00F44198, uint32);
 	mini_golf_paint_util_7c(direction, imageId, 0, 0, 32, 1, 15, height, 0, 10, height + 2, get_current_rotation());
@@ -488,7 +488,7 @@ static void paint_mini_golf_track_flat_to_25_deg_up(uint8 rideIndex, uint8 track
 	mini_golf_paint_util_7c(direction, imageId, 0, 0, 32, 20, 1, height, 0, 6, height, get_current_rotation());
 
 	metal_a_supports_paint_setup(3, 4, 0, height, RCT2_GLOBAL(0x00F4419C, uint32));
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 
 	imageId = mini_golf_track_sprites_flat_to_25_deg_up[direction][1] | RCT2_GLOBAL(0x00F44198, uint32);
 	mini_golf_paint_util_7c(direction, imageId, 0, 0, 32, 1, 11, height, 0, 10, height + 2, get_current_rotation());
@@ -523,7 +523,7 @@ static void paint_mini_golf_track_25_deg_up_to_flat(uint8 rideIndex, uint8 track
 	mini_golf_paint_util_7c(direction, imageId, 0, 0, 32, 20, 1, height, 0, 6, height, get_current_rotation());
 
 	metal_a_supports_paint_setup(3, 4, 8, height, RCT2_GLOBAL(0x00F4419C, uint32));
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 
 	imageId = mini_golf_track_sprites_25_deg_up_to_flat[direction][1] | RCT2_GLOBAL(0x00F44198, uint32);
 	mini_golf_paint_util_7c(direction, imageId, 0, 0, 32, 1, 11, height, 0, 10, height + 2, get_current_rotation());
@@ -616,7 +616,7 @@ static void paint_mini_golf_station(uint8 rideIndex, uint8 trackSequence, uint8 
 
 	wooden_a_supports_paint_setup(direction & 1, 0, height, RCT2_GLOBAL(0x00F4419C, uint32), NULL);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -629,7 +629,7 @@ static void paint_mini_golf_track_left_quarter_turn_1_tile(uint8 rideIndex, uint
 
 	metal_a_supports_paint_setup(3, 4, 0, height, RCT2_GLOBAL(0x00F4419C, uint32));
 
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_B8 | SEGMENT_C8 | SEGMENT_C4 | SEGMENT_D0, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_B8 | SEGMENT_C8 | SEGMENT_C4 | SEGMENT_D0, direction));
 
 	const bool shouldDrawFence = mini_golf_paint_util_should_draw_fence(mapElement);
 
@@ -699,7 +699,7 @@ static void paint_mini_golf_hole_ab(uint8 trackSequence, uint8 direction, int he
 
 	bool drewSupports = wooden_a_supports_paint_setup(direction & 1, 0, height, RCT2_GLOBAL(0x00F4419C, uint32), NULL);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 
 	if ((direction == 0 && trackSequence == 0) || (direction == 2 && trackSequence == 1)) {
@@ -745,7 +745,7 @@ static void paint_mini_golf_hole_c(uint8 rideIndex, uint8 trackSequence, uint8 d
 
 	bool drewSupports = wooden_a_supports_paint_setup(direction & 1, 0, height, RCT2_GLOBAL(0x00F4419C, uint32), NULL);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 
 	if ((direction == 0 && trackSequence == 0) || (direction == 2 && trackSequence == 1)) {
@@ -794,7 +794,7 @@ static void paint_mini_golf_hole_d(uint8 rideIndex, uint8 trackSequence, uint8 d
 	if (trackSequence == 2) supportType = 1 - supportType;
 	bool drewSupports = wooden_a_supports_paint_setup(supportType, 0, height, RCT2_GLOBAL(0x00F4419C, uint32), NULL);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 
 	switch ((direction << 4) | trackSequence) {
@@ -860,7 +860,7 @@ static void paint_mini_golf_hole_e(uint8 rideIndex, uint8 trackSequence, uint8 d
 	if (trackSequence == 2) supportType = 1 - supportType;
 	bool drewSupports = wooden_a_supports_paint_setup(supportType, 0, height, RCT2_GLOBAL(0x00F4419C, uint32), NULL);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 
 	switch ((direction << 4) | trackSequence) {

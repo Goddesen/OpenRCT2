@@ -53,7 +53,7 @@ static void shop_paint_setup(uint8 rideIndex, uint8 trackSequence, uint8 directi
 		sub_98197C(imageId, 0, 0, 28, 28, 45, height, 2, 2, height, get_current_rotation());
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 48, 0x20);
 }
 

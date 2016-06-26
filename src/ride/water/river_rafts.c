@@ -319,7 +319,7 @@ static void paint_river_rafts_track_flat(uint8 rideIndex, uint8 trackSequence, u
 		paint_util_push_tunnel_left(height, TUNNEL_6);
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -352,7 +352,7 @@ static void paint_river_rafts_station(uint8 rideIndex, uint8 trackSequence, uint
 		paint_util_push_tunnel_left(height, TUNNEL_6);
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -374,13 +374,13 @@ static void paint_river_rafts_track_left_quarter_turn_5_tiles(uint8 rideIndex, u
 	}
 
 	switch (trackSequence) {
-	case 0: paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0); break;
-	case 1: paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_BC | SEGMENT_CC | SEGMENT_D4, direction), 0xFFFF, 0); break;
-	case 2: paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_C8 | SEGMENT_C4 | SEGMENT_CC | SEGMENT_B4 | SEGMENT_B8 | SEGMENT_D0, direction), 0xFFFF, 0); break;
-	case 3: paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_CC | SEGMENT_D4 | SEGMENT_BC | SEGMENT_C4 | SEGMENT_B4 | SEGMENT_C0 | SEGMENT_C8 | SEGMENT_D0, direction), 0xFFFF, 0); break;
-	case 4: paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_BC | SEGMENT_CC | SEGMENT_D4, direction), 0xFFFF, 0); break;
-	case 5: paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_C8 | SEGMENT_C4 | SEGMENT_D4 | SEGMENT_D0 | SEGMENT_C0 | SEGMENT_B8, direction), 0xFFFF, 0); break;
-	case 6: paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0); break;
+	case 0: paint_util_set_all_segments_support_invalid_height(); break;
+	case 1: paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_BC | SEGMENT_CC | SEGMENT_D4, direction)); break;
+	case 2: paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_C8 | SEGMENT_C4 | SEGMENT_CC | SEGMENT_B4 | SEGMENT_B8 | SEGMENT_D0, direction)); break;
+	case 3: paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_CC | SEGMENT_D4 | SEGMENT_BC | SEGMENT_C4 | SEGMENT_B4 | SEGMENT_C0 | SEGMENT_C8 | SEGMENT_D0, direction)); break;
+	case 4: paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_BC | SEGMENT_CC | SEGMENT_D4, direction)); break;
+	case 5: paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_C8 | SEGMENT_C4 | SEGMENT_D4 | SEGMENT_D0 | SEGMENT_C0 | SEGMENT_B8, direction)); break;
+	case 6: paint_util_set_all_segments_support_invalid_height(); break;
 	}
 
 	paint_util_set_general_support_height(height + 32, 0x20);
@@ -404,13 +404,13 @@ static void paint_river_rafts_track_right_quarter_turn_5_tiles(uint8 rideIndex, 
 	}
 
 	switch (trackSequence) {
-	case 0: paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0); break;
-	case 1: paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_B4 | SEGMENT_C8 | SEGMENT_CC, direction), 0xFFFF, 0); break;
-	case 2: paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_D4 | SEGMENT_BC | SEGMENT_C0 | SEGMENT_CC, direction), 0xFFFF, 0); break;
-	case 3: paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_B4 | SEGMENT_C8 | SEGMENT_CC | SEGMENT_C4 | SEGMENT_B8 | SEGMENT_BC | SEGMENT_D0 | SEGMENT_D4, direction), 0xFFFF, 0); break;
-	case 4: paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_B4 | SEGMENT_C8 | SEGMENT_CC, direction), 0xFFFF, 0); break;
-	case 5: paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D4 | SEGMENT_C4 | SEGMENT_D0 | SEGMENT_B8 | SEGMENT_C0 | SEGMENT_C8, direction), 0xFFFF, 0); break;
-	case 6: paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0); break;
+	case 0: paint_util_set_all_segments_support_invalid_height(); break;
+	case 1: paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_B4 | SEGMENT_C8 | SEGMENT_CC, direction)); break;
+	case 2: paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_D4 | SEGMENT_BC | SEGMENT_C0 | SEGMENT_CC, direction)); break;
+	case 3: paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_B4 | SEGMENT_C8 | SEGMENT_CC | SEGMENT_C4 | SEGMENT_B8 | SEGMENT_BC | SEGMENT_D0 | SEGMENT_D4, direction)); break;
+	case 4: paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_B4 | SEGMENT_C8 | SEGMENT_CC, direction)); break;
+	case 5: paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D4 | SEGMENT_C4 | SEGMENT_D0 | SEGMENT_B8 | SEGMENT_C0 | SEGMENT_C8, direction)); break;
+	case 6: paint_util_set_all_segments_support_invalid_height(); break;
 	}
 
 	paint_util_set_general_support_height(height + 32, 0x20);
@@ -458,13 +458,13 @@ static void paint_river_rafts_track_s_bend(uint32 baseImageId, uint8 trackSequen
 	switch (trackSequence) {
 	case 0:
 	case 3:
-		paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+		paint_util_set_all_segments_support_invalid_height();
 		break;
 	case 1:
-		paint_util_set_segment_support_height(paint_util_rotate_segments(ssegs1, direction), 0xFFFF, 0);
+		paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(ssegs1, direction));
 		break;
 	case 2:
-		paint_util_set_segment_support_height(paint_util_rotate_segments(ssegs2, direction), 0xFFFF, 0);
+		paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(ssegs2, direction));
 		break;
 	}
 

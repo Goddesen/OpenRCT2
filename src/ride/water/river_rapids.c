@@ -276,7 +276,7 @@ static void paint_river_rapids_track_flat(uint8 rideIndex, uint8 trackSequence, 
 		paint_util_push_tunnel_left(height, TUNNEL_6);
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -343,7 +343,7 @@ static void paint_river_rapids_track_25_deg(uint8 direction, int height, const u
 			break;
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 56, 0x20);
 }
 
@@ -400,7 +400,7 @@ static void paint_river_rapids_track_25_deg_to_flat_a(uint8 direction, int heigh
 			break;
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 40, 0x20);
 }
 
@@ -457,7 +457,7 @@ static void paint_river_rapids_track_25_deg_to_flat_b(uint8 direction, int heigh
 			break;
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 48, 0x20);
 }
 
@@ -546,7 +546,7 @@ static void paint_river_rapids_track_left_quarter_turn_1_tile(uint8 rideIndex, u
 	}
 
 	wooden_a_supports_paint_setup((direction & 1), 0, height, RCT2_GLOBAL(0x00F4419C, uint32), NULL);
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -600,7 +600,7 @@ static void paint_river_rapids_track_right_quarter_turn_1_tile(uint8 rideIndex, 
 	}
 
 	wooden_a_supports_paint_setup(1 - (direction & 1), 0, height, RCT2_GLOBAL(0x00F4419C, uint32), NULL);
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -651,7 +651,7 @@ static void paint_river_rapids_track_waterfall(uint8 rideIndex, uint8 trackSeque
 		paint_util_push_tunnel_left(height, TUNNEL_6);
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -684,7 +684,7 @@ static void paint_river_rapids_track_rapids(uint8 rideIndex, uint8 trackSequence
 		paint_util_push_tunnel_left(height, TUNNEL_6);
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -780,7 +780,7 @@ static void paint_river_rapids_track_whirlpool(uint8 rideIndex, uint8 trackSeque
 		paint_util_push_tunnel_left(height, TUNNEL_6);
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 

@@ -55,7 +55,7 @@ static void paint_boat_ride_track_flat(uint8 rideIndex, uint8 trackSequence, uin
 		sub_98197C(imageId, 0, 0, 32, 1, 3, height, 0, 28, height, get_current_rotation());
 	}
 
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 	paint_util_set_general_support_height(height + 16, 0x20);
 }
 
@@ -74,7 +74,7 @@ static void paint_boat_ride_station(uint8 rideIndex, uint8 trackSequence, uint8 
 		track_paint_util_draw_pier(ride, entranceStyle, position, direction, height, mapElement, get_current_rotation());
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -113,7 +113,7 @@ static void paint_boat_ride_track_left_quarter_turn_1_tile(uint8 rideIndex, uint
 			break;
 	}
 
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_C8, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_C8, direction));
 	paint_util_set_general_support_height(height + 16, 0x20);
 }
 

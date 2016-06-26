@@ -154,7 +154,7 @@ static void paint_go_karts_track_flat(uint8 rideIndex, uint8 trackSequence, uint
 
 	wooden_a_supports_paint_setup((direction & 1), 0, height, RCT2_GLOBAL(0x00F4419C, uint32), NULL);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -201,7 +201,7 @@ static void paint_go_karts_track_25_deg_up(uint8 rideIndex, uint8 trackSequence,
 			break;
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 56, 0x20);
 }
 
@@ -248,7 +248,7 @@ static void paint_go_karts_track_flat_to_25_deg_up(uint8 rideIndex, uint8 trackS
 			break;
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 48, 0x20);
 }
 
@@ -295,7 +295,7 @@ static void paint_go_karts_track_25_deg_up_to_flat(uint8 rideIndex, uint8 trackS
 			break;
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 40, 0x20);
 }
 
@@ -403,7 +403,7 @@ static void paint_go_karts_station(uint8 rideIndex, uint8 trackSequence, uint8 d
 
 	wooden_a_supports_paint_setup((direction & 1), 0, height, RCT2_GLOBAL(0x00F4419C, uint32), NULL);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -469,7 +469,7 @@ static void paint_go_karts_track_left_quarter_turn_1_tile(uint8 rideIndex, uint8
 
 	wooden_a_supports_paint_setup((direction & 1), 0, height, RCT2_GLOBAL(0x00F4419C, uint32), NULL);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 

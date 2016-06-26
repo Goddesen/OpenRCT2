@@ -66,7 +66,7 @@ static void paint_lift_base(uint8 rideIndex, uint8 trackSequence, uint8 directio
 		paint_lift_cage(-1, RCT2_GLOBAL(0x00F44198, uint32), height + 64, get_current_rotation());
 
 		RCT2_GLOBAL(0x9E323C, uint16) = (((height + 96) >> 4) & 0x00FF) | (6 << 8);
-		paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+		paint_util_set_all_segments_support_invalid_height();
 
 		// Original set support height to (height + 32). Caused supports to code with lift cage.
 		paint_util_set_general_support_height(height + 96, 0x20);
@@ -94,7 +94,7 @@ static void paint_lift_base(uint8 rideIndex, uint8 trackSequence, uint8 directio
 		case 7: blockedSegments = SEGMENT_B8 | SEGMENT_D0 | SEGMENT_C0 | SEGMENT_D4 | SEGMENT_BC; break;
 		case 8: blockedSegments = SEGMENT_B8 | SEGMENT_D0 | SEGMENT_C0; break;
 	}
-	paint_util_set_segment_support_height(blockedSegments, 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(blockedSegments);
 	paint_util_set_segment_support_height(SEGMENTS_ALL & ~blockedSegments, height + 2, 0x20);
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
@@ -108,7 +108,7 @@ static void paint_lift_tower_section(uint8 rideIndex, uint8 trackSequence, uint8
 
 	paint_lift_cage(-1, RCT2_GLOBAL(0x00F44198, uint32), height, get_current_rotation());
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 
 	RCT2_GLOBAL(0x9E323C, uint16) = (((height + 32) >> 4) & 0x00FF) | (6 << 8);
 	paint_util_set_general_support_height(height + 32, 0x20);

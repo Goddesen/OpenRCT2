@@ -53,7 +53,7 @@ static void paint_flying_saucers(uint8 rideIndex, uint8 trackSequence, uint8 dir
 
 	track_paint_util_paint_fences(edges, position, mapElement, ride, RCT2_GLOBAL(0x00F44198, uint32), height, flying_saucers_fence_sprites, get_current_rotation());
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 48, 0x20);
 }
 

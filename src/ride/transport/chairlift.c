@@ -237,7 +237,7 @@ static void chairlift_paint_station_ne_sw(uint8 rideIndex, uint8 trackSequence, 
 		sub_98197C(imageId, 30, 16, 1, 1, 7, height + 2, 1, 16, height + 2, get_current_rotation()); // bound offset x is wrong?
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_push_tunnel_left(height, TUNNEL_6);
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
@@ -318,7 +318,7 @@ static void chairlift_paint_station_se_nw(uint8 rideIndex, uint8 trackSequence, 
 		paint_util_push_tunnel_right(height, TUNNEL_6);
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -345,7 +345,7 @@ static void chairlift_paint_flat(uint8 rideIndex, uint8 trackSequence, uint8 dir
 		paint_util_push_tunnel_left(height, TUNNEL_6);
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -380,7 +380,7 @@ static void chairlift_paint_25_deg_up(uint8 rideIndex, uint8 trackSequence, uint
 			break;
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 56, 0x20);
 }
 
@@ -432,7 +432,7 @@ static void chairlift_paint_flat_to_25_deg_up(uint8 rideIndex, uint8 trackSequen
 	}
 
 	chairlift_paint_util_draw_supports(SEGMENT_C4, height);
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 48, 0x20);
 }
 
@@ -485,7 +485,7 @@ static void chairlift_paint_25_deg_up_to_flat(uint8 rideIndex, uint8 trackSequen
 	}
 
 	chairlift_paint_util_draw_supports(SEGMENT_C4, height);
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 40, 0x20);
 }
 
@@ -567,7 +567,7 @@ static void chairlift_paint_left_quarter_turn_1_tile(uint8 rideIndex, uint8 trac
 
 	chairlift_paint_util_draw_supports(paint_util_rotate_segments(SEGMENT_C8 | SEGMENT_D0, direction), height);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 

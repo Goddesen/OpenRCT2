@@ -113,7 +113,7 @@ static void paint_enterprise(uint8 rideIndex, uint8 trackSequence, uint8 directi
 		case 15: cornerSegments = SEGMENT_D0 | SEGMENT_C0 | SEGMENT_D4; break;
 	}
 	paint_util_set_segment_support_height(cornerSegments, height + 2, 0x20);
-	paint_util_set_segment_support_height(SEGMENTS_ALL & ~cornerSegments, 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(SEGMENTS_ALL & ~cornerSegments);
 	paint_util_set_general_support_height(height + 160, 0x20);
 
 }

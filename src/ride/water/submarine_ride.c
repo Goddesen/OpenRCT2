@@ -88,7 +88,7 @@ static void submarine_ride_paint_track_station(uint8 rideIndex, uint8 trackSeque
 		track_paint_util_draw_pier(ride, entranceStyle, position, direction, height, mapElement, get_current_rotation());
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -112,7 +112,7 @@ static void submarine_ride_paint_track_flat(uint8 rideIndex, uint8 trackSequence
 		metal_a_supports_paint_setup((direction & 1) ? 4 : 5, 4, -1, heightLower, RCT2_GLOBAL(0x00F4419C, uint32));
 	}
 
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 	paint_util_set_general_support_height(height + 16, 0x20);
 }
 
@@ -124,14 +124,14 @@ static void submarine_ride_paint_track_left_quarter_turn_3_tiles(uint8 rideIndex
 	switch (trackSequence) {
 		case 0:
 			metal_a_supports_paint_setup(4, 4, -1, height - 16, RCT2_GLOBAL(0x00F4419C, uint32));
-			paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC | SEGMENT_B4, direction), 0xFFFF, 0);
+			paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC | SEGMENT_B4, direction));
 			break;
 		case 2:
-			paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_C8 | SEGMENT_C4 | SEGMENT_D0 | SEGMENT_B8, direction), 0xFFFF, 0);
+			paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_C8 | SEGMENT_C4 | SEGMENT_D0 | SEGMENT_B8, direction));
 			break;
 		case 3:
 			metal_a_supports_paint_setup(4, 4, -1, height - 16, RCT2_GLOBAL(0x00F4419C, uint32));
-			paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_C8 | SEGMENT_C4 | SEGMENT_D4 | SEGMENT_C0, direction), 0xFFFF, 0);
+			paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_C8 | SEGMENT_C4 | SEGMENT_D4 | SEGMENT_C0, direction));
 			break;
 	}
 
@@ -150,7 +150,7 @@ static void submarine_ride_paint_track_left_quarter_turn_1_tile(uint8 rideIndex,
 	track_paint_util_left_quarter_turn_1_tile_paint(1, height - 16, 0, direction, RCT2_GLOBAL(0x00F44198, uint32), trackSpritesSubmarineRideMiniHelicoptersQuarterTurn1Tile, get_current_rotation());
 	track_paint_util_left_quarter_turn_1_tile_tunnel(height - 16, direction, trackSequence);
 
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_B8 | SEGMENT_C8 | SEGMENT_C4 | SEGMENT_D0, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_B8 | SEGMENT_C8 | SEGMENT_C4 | SEGMENT_D0, direction));
 	paint_util_set_general_support_height(height + 16, 0x20);
 }
 

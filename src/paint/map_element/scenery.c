@@ -301,15 +301,15 @@ void scenery_paint(uint8 direction, int height, rct_map_element* mapElement) {
 		return;
 	}
 	if (entry->small_scenery.flags & (SMALL_SCENERY_FLAG27 | SMALL_SCENERY_FLAG_FULL_TILE)) {
-		paint_util_set_segment_support_height(SEGMENT_C4, 0xFFFF, 0);
+		paint_util_set_segment_support_invalid_height(SEGMENT_C4);
 		if (entry->small_scenery.flags & SMALL_SCENERY_FLAG_VOFFSET_CENTRE) {
-			paint_util_set_segment_support_height(SEGMENTS_ALL & ~SEGMENT_C4, 0xFFFF, 0);
+			paint_util_set_segment_support_invalid_height(SEGMENTS_ALL & ~SEGMENT_C4);
 		}
 		return;
 	}
 	if (!(entry->small_scenery.flags & SMALL_SCENERY_FLAG_VOFFSET_CENTRE)) {
 		return;
 	}
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_B4 | SEGMENT_C8 | SEGMENT_CC, get_current_rotation()), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_B4 | SEGMENT_C8 | SEGMENT_CC, get_current_rotation()));
 	return;
 }

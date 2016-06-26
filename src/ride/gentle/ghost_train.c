@@ -169,7 +169,7 @@ static void paint_ghost_train_track_flat(uint8 rideIndex, uint8 trackSequence, u
 		metal_a_supports_paint_setup(3, 4, 0, height, RCT2_GLOBAL(0x00F4419C, uint32));
 	}
 
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -212,7 +212,7 @@ static void paint_ghost_train_track_25_deg_up(uint8 rideIndex, uint8 trackSequen
 			break;
 	}
 
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 	paint_util_set_general_support_height(height + 56, 0x20);
 }
 
@@ -254,7 +254,7 @@ static void paint_ghost_train_track_flat_to_25_deg_up(uint8 rideIndex, uint8 tra
 			break;
 	}
 
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 	paint_util_set_general_support_height(height + 48, 0x20);
 }
 
@@ -296,7 +296,7 @@ static void paint_ghost_train_track_25_deg_up_to_flat(uint8 rideIndex, uint8 tra
 			break;
 	}
 
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 	paint_util_set_general_support_height(height + 40, 0x20);
 }
 
@@ -354,7 +354,7 @@ static void paint_ghost_train_station(uint8 rideIndex, uint8 trackSequence, uint
 
 	track_paint_util_draw_station(rideIndex, trackSequence, direction, height, mapElement);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -377,7 +377,7 @@ static void paint_ghost_train_track_right_quarter_turn_3_tiles(uint8 rideIndex, 
 		case 2: blockedSegments = SEGMENT_D0 | SEGMENT_C4 | SEGMENT_D4 | SEGMENT_C0; break;
 		case 3: blockedSegments = SEGMENT_D4 | SEGMENT_C4 | SEGMENT_C8 | SEGMENT_B8; break;
 	}
-	paint_util_set_segment_support_height(paint_util_rotate_segments(blockedSegments, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(blockedSegments, direction));
 
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
@@ -396,7 +396,7 @@ static void paint_ghost_train_track_left_quarter_turn_1_tile(uint8 rideIndex, ui
 	track_paint_util_left_quarter_turn_1_tile_tunnel(height, direction, trackSequence);
 
 	metal_a_supports_paint_setup(3, 4, 0, height, RCT2_GLOBAL(0x00F4419C, uint32));
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -427,7 +427,7 @@ static void paint_ghost_train_track_spinning_tunnel(uint8 rideIndex, uint8 track
 
 	wooden_a_supports_paint_setup((direction & 1), 0, height, RCT2_GLOBAL(0x00F441A0, uint32), NULL);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -454,7 +454,7 @@ static void paint_ghost_train_track_brakes(uint8 rideIndex, uint8 trackSequence,
 		metal_a_supports_paint_setup(3, 4, 0, height, RCT2_GLOBAL(0x00F4419C, uint32));
 	}
 
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 

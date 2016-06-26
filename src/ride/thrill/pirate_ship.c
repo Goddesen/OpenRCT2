@@ -182,7 +182,7 @@ static void paint_pirate_ship(uint8 rideIndex, uint8 trackSequence, uint8 direct
 		sub_98196C(imageId, 0, 0, 32, 32, 1, height, get_current_rotation());
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 
 	if (direction & 1) {
 		if (relativeTrackSequence != 1 && relativeTrackSequence != 4) {

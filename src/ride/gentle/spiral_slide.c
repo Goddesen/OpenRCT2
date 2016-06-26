@@ -183,7 +183,7 @@ static void paint_spiral_slide(uint8 rideIndex, uint8 trackSequence, uint8 direc
 		case 3: spiral_slide_paint_tile_front(rideIndex, trackSequence, direction, height, mapElement); break;
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 128, 0x20);
 }
 

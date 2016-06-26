@@ -50,7 +50,7 @@ void map_element_paint_setup(int x, int y)
 		x >= 32 &&
 		y >= 32
 	) {
-		paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+		paint_util_set_all_segments_support_invalid_height();
 		paint_util_force_set_general_support_height(-1, 0);
 		RCT2_GLOBAL(0x0141E9DB, uint8) = 0;
 		RCT2_GLOBAL(0x0141E9DC, uint32) = 0xFFFF;
@@ -73,7 +73,7 @@ void sub_68B2B7(int x, int y)
 		x >= 32 &&
 		y >= 32
 	) {
-		paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+		paint_util_set_all_segments_support_invalid_height();
 		paint_util_force_set_general_support_height(-1, 0);
 		RCT2_GLOBAL(0x0141E9DC, uint32) = 0xFFFF;
 		RCT2_GLOBAL(0x0141E9DB, uint8) = 2;
@@ -350,6 +350,22 @@ void paint_util_set_segment_support_height(int segments, uint16 height, uint8 sl
 				RCT2_GLOBAL(0x0141E9B6 + s * 4, uint8) = slope;
 			}
 		}
+	}
+}
+
+void paint_util_set_segment_support_invalid_height(int segments)
+{
+	for (int s = 0; s < countof(segment_offsets); s++) {
+		if (segments & segment_offsets[s]) {
+			RCT2_GLOBAL(0x0141E9B4 + s * 4, uint16) = 0xFFFF;
+		}
+	}
+}
+
+void paint_util_set_all_segments_support_invalid_height(void)
+{
+	for (int s = 0; s < countof(segment_offsets); s++) {
+		RCT2_GLOBAL(0x0141E9B4 + s * 4, uint16) = 0xFFFF;
 	}
 }
 

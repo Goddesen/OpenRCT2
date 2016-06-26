@@ -93,7 +93,7 @@ static void paint_circus_show(uint8 rideIndex, uint8 trackSequence, uint8 direct
 	}
 
 	paint_util_set_segment_support_height(cornerSegments, height + 2, 0x20);
-	paint_util_set_segment_support_height(SEGMENTS_ALL & ~cornerSegments, 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(SEGMENTS_ALL & ~cornerSegments);
 	paint_util_set_general_support_height(height + 128, 0x20);
 }
 

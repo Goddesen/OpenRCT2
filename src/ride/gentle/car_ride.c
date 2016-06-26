@@ -179,7 +179,7 @@ static void paint_car_ride_track_flat(uint8 rideIndex, uint8 trackSequence, uint
 	}
 
 	metal_a_supports_paint_setup(3, 4, 0, height, RCT2_GLOBAL(0x00F4419C, uint32));
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -210,7 +210,7 @@ static void paint_car_ride_track_25_deg_up(uint8 rideIndex, uint8 trackSequence,
 	}
 
 	metal_a_supports_paint_setup(3, 4, 8, height, RCT2_GLOBAL(0x00F4419C, uint32));
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 	paint_util_set_general_support_height(height + 56, 0x20);
 }
 
@@ -241,7 +241,7 @@ static void paint_car_ride_track_flat_to_25_deg_up(uint8 rideIndex, uint8 trackS
 	}
 
 	metal_a_supports_paint_setup(3, 4, 3, height, RCT2_GLOBAL(0x00F4419C, uint32));
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 	paint_util_set_general_support_height(height + 48, 0x20);
 }
 
@@ -272,7 +272,7 @@ static void paint_car_ride_track_25_deg_up_to_flat(uint8 rideIndex, uint8 trackS
 	}
 
 	metal_a_supports_paint_setup(3, 4, 6, height, RCT2_GLOBAL(0x00F4419C, uint32));
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 	paint_util_set_general_support_height(height + 40, 0x20);
 }
 
@@ -330,7 +330,7 @@ static void paint_car_ride_station(uint8 rideIndex, uint8 trackSequence, uint8 d
 
 	track_paint_util_draw_station(rideIndex, trackSequence, direction, height, mapElement);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -354,7 +354,7 @@ static void paint_car_ride_track_right_quarter_turn_3_tiles(uint8 rideIndex, uin
 		case 2: blockedSegments = SEGMENT_D0 | SEGMENT_C4 | SEGMENT_D4 | SEGMENT_C0; break;
 		case 3: blockedSegments = SEGMENT_D4 | SEGMENT_C4 | SEGMENT_C8 | SEGMENT_B8; break;
 	}
-	paint_util_set_segment_support_height(paint_util_rotate_segments(blockedSegments, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(blockedSegments, direction));
 
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
@@ -382,7 +382,7 @@ static void paint_car_ride_track_left_quarter_turn_1_tile(uint8 rideIndex, uint8
 
 	track_paint_util_left_quarter_turn_1_tile_tunnel(height, direction, trackSequence);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -413,7 +413,7 @@ static void paint_car_ride_track_spinning_tunnel(uint8 rideIndex, uint8 trackSeq
 
 	wooden_a_supports_paint_setup((direction & 1), 0, height, RCT2_GLOBAL(0x00F441A0, uint32), NULL);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 
@@ -459,7 +459,7 @@ static void paint_car_ride_track_60_deg_up(uint8 rideIndex, uint8 trackSequence,
 		metal_a_supports_paint_setup(3, 4, 32, height, RCT2_GLOBAL(0x00F4419C, uint32));
 	}
 
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 	paint_util_set_general_support_height(height + 104, 0x20);
 }
 
@@ -505,7 +505,7 @@ static void paint_car_ride_track_25_deg_up_to_60_deg_up(uint8 rideIndex, uint8 t
 		metal_a_supports_paint_setup(3, 4, 12, height, RCT2_GLOBAL(0x00F4419C, uint32));
 	}
 
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 	paint_util_set_general_support_height(height + 72, 0x20);
 }
 
@@ -551,7 +551,7 @@ static void paint_car_ride_track_60_deg_up_to_25_deg_up(uint8 rideIndex, uint8 t
 		metal_a_supports_paint_setup(3, 4, 20, height, RCT2_GLOBAL(0x00F4419C, uint32));
 	}
 
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 	paint_util_set_general_support_height(height + 72, 0x20);
 }
 
@@ -591,7 +591,7 @@ static void paint_car_ride_track_log_bumps(uint8 rideIndex, uint8 trackSequence,
 	}
 
 	metal_a_supports_paint_setup(3, 4, 0, height, RCT2_GLOBAL(0x00F4419C, uint32));
-	paint_util_set_segment_support_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction), 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(paint_util_rotate_segments(SEGMENT_D0 | SEGMENT_C4 | SEGMENT_CC, direction));
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
 

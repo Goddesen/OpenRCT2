@@ -149,7 +149,7 @@ void ride_entrance_exit_paint(uint8 direction, int height, rct_map_element* map_
 	}
 	wooden_a_supports_paint_setup(direction & 1, 0, height, image_id, NULL);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 
 	height += is_exit ? 40 : 56;
 	paint_util_set_general_support_height(height, 0x20);
@@ -235,7 +235,7 @@ void park_entrance_paint(uint8 direction, int height, rct_map_element* map_eleme
 	}
 	wooden_a_supports_paint_setup(direction & 1, 0, height, image_id, NULL);
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 	paint_util_set_general_support_height(height + 80, 0x20);
 }
 

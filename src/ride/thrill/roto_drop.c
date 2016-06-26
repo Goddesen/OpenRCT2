@@ -126,7 +126,7 @@ static void paint_roto_drop_base(uint8 rideIndex, uint8 trackSequence, uint8 dir
 		case 7: blockedSegments = SEGMENT_B8 | SEGMENT_D0 | SEGMENT_C0 | SEGMENT_D4 | SEGMENT_BC; break;
 		case 8: blockedSegments = SEGMENT_B8 | SEGMENT_D0 | SEGMENT_C0; break;
 	}
-	paint_util_set_segment_support_height(blockedSegments, 0xFFFF, 0);
+	paint_util_set_segment_support_invalid_height(blockedSegments);
 	paint_util_set_segment_support_height(SEGMENTS_ALL & ~blockedSegments, height + 2, 0x20);
 	paint_util_set_general_support_height(height + 32, 0x20);
 }
@@ -147,7 +147,7 @@ static void paint_roto_drop_tower_section(uint8 rideIndex, uint8 trackSequence, 
 		sub_98199C(imageId, 0, 0, 2, 2, 30, height, 8, 8, height, get_current_rotation());
 	}
 
-	paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
+	paint_util_set_all_segments_support_invalid_height();
 
 	RCT2_GLOBAL(0x9E323C, uint16) = (((height + 32) >> 4) & 0x00FF) | (6 << 8);
 	paint_util_set_general_support_height(height + 32, 0x20);
