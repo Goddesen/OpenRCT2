@@ -351,23 +351,13 @@ bool metal_a_supports_paint_setup(int supportType, int segment, int special, int
 		uint8* esi = &(RCT2_ADDRESS(0x0097AF32, uint8)[rotation * 2]);
 
 		uint8 newSegment = esi[segment * 8];
-		if (height <= RCT2_ADDRESS(0x0141E9B4, uint16)[newSegment * 2]) {
+		int i;
+		for (i = 0; i < 4 && height <= RCT2_ADDRESS(0x0141E9B4, uint16)[newSegment*2]; ++i) {
 			esi += 72;
 			newSegment = esi[segment * 8];
-			if (height <= RCT2_ADDRESS(0x0141E9B4, uint16)[newSegment * 2]) {
-				esi += 72;
-				newSegment = esi[segment * 8];
-				if (height <= RCT2_ADDRESS(0x0141E9B4, uint16)[newSegment * 2]) {
-					esi += 72;
-					newSegment = esi[segment * 8];
-					if (height <= RCT2_ADDRESS(0x0141E9B4, uint16)[newSegment * 2]) {
-						esi += 72;
-						newSegment = esi[segment * 8];
-						return true;
-					}
-				}
-			}
 		}
+		if (i == 4)
+			return true;
 
 		uint8 ebp = esi[segment * 8 + 1];
 

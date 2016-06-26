@@ -82,8 +82,8 @@ const uint8 byte_98D8A4[] = {
 };
 
 void loc_6A37C9(rct_map_element * mapElement, int height, rct_footpath_entry * footpathEntry, bool hasFences, uint32 imageFlags, uint32 sceneryImageFlags);
-
 void loc_6A3B57(rct_map_element* mapElement, sint16 height, rct_footpath_entry* footpathEntry, bool hasFences, uint32 imageFlags, uint32 sceneryImageFlags);
+static inline uint8 path_rotate_perimeter(uint8_t perimeter, uint8_t rotation);
 
 /* rct2: 0x006A5AE5 */
 void path_bit_lights_paint(rct_scenery_entry* pathBitEntry, rct_map_element* mapElement, int height, uint8 edges, uint32 pathBitImageFlags)
@@ -502,7 +502,7 @@ void sub_6A4101(rct_map_element * map_element, uint16 height, uint32 ebp, bool w
  * @param imageFlags (0x00F3EF70)
  * @param sceneryImageFlags (0x00F3EF74)
  */
-void sub_6A3F61(rct_map_element * map_element, uint16 bp, uint16 height, rct_footpath_entry * footpathEntry, uint32 imageFlags, uint32 sceneryImageFlags, bool word_F3F038)
+void sub_6A3F61(rct_map_element * map_element, uint8 bp, uint16 height, rct_footpath_entry * footpathEntry, uint32 imageFlags, uint32 sceneryImageFlags, bool word_F3F038)
 {
 	// eax --
 	// ebx --
@@ -708,24 +708,20 @@ void path_paint(uint8 direction, uint16 height, rct_map_element * map_element)
 
 void loc_6A37C9(rct_map_element * mapElement, int height, rct_footpath_entry * footpathEntry, bool hasFences, uint32 imageFlags, uint32 sceneryImageFlags)
 {
-	// Rol edges around rotation
-	uint8 edges = ((mapElement->properties.path.edges << get_current_rotation()) & 0xF) |
-		(((mapElement->properties.path.edges & 0xF) << get_current_rotation()) >> 4);
+	uint8 rotation = get_current_rotation();
 
-	uint8 corners = (((mapElement->properties.path.edges >> 4) << get_current_rotation()) & 0xF) |
-		(((mapElement->properties.path.edges >> 4) << get_current_rotation()) >> 4);
-
+	// Rotate edges and corners around rotation
+	uint8 perimeter = path_rotate_perimeter(mapElement->properties.path.edges, rotation);
+	uint8 edges = perimeter & 0xF;
 
 	rct_xy16 boundBoxOffset = {.x =stru_98D804[edges][0], .y = stru_98D804[edges][1]};
 	rct_xy16 boundBoxSize = {.x =stru_98D804[edges][2], .y = stru_98D804[edges][3]};
 
-	uint16 edi = edges | (corners << 4);
-
 	uint32 imageId;
 	if (footpath_element_is_sloped(mapElement)) {
-		imageId = ((mapElement->properties.path.type + get_current_rotation()) & 3) + 16;
+		imageId = ((mapElement->properties.path.type + rotation) & 3) + 16;
 	} else {
-		imageId = byte_98D6E0[edi];
+		imageId = byte_98D6E0[perimeter];
 	}
 
 	imageId += footpathEntry->image;
@@ -741,30 +737,30 @@ void loc_6A37C9(rct_map_element * mapElement, int height, rct_footpath_entry * f
 	}
 
 	if (!hasFences || !RCT2_GLOBAL(0x9DE57C, bool)) {
-		sub_98197C(imageId | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, get_current_rotation());
+		sub_98197C(imageId | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, rotation);
 	} else {
 		uint32 image_id;
 		if (footpath_element_is_sloped(mapElement)) {
-			image_id = ((mapElement->properties.path.type + get_current_rotation()) & 3) + footpathEntry->bridge_image + 51;
+			image_id = ((mapElement->properties.path.type + rotation) & 3) + footpathEntry->bridge_image + 51;
 		} else {
 			image_id = byte_98D8A4[edges] + footpathEntry->bridge_image + 49;
 		}
 
-		sub_98197C(image_id | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, get_current_rotation());
+		sub_98197C(image_id | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, rotation);
 
 		if (!(mapElement->type & 1) && !(footpathEntry->flags & 2)) {
 			// don't draw
 		} else {
-			sub_98199C(imageId | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, get_current_rotation());
+			sub_98199C(imageId | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, rotation);
 		}
 	}
 
 
-	sub_6A3F61(mapElement, edi, height, footpathEntry, imageFlags, sceneryImageFlags, hasFences);
+	sub_6A3F61(mapElement, perimeter, height, footpathEntry, imageFlags, sceneryImageFlags, hasFences);
 
 	uint16 ax = 0;
 	if (footpath_element_is_sloped(mapElement)) {
-		ax = ((mapElement->properties.path.type + get_current_rotation()) & 0x3) + 1;
+		ax = ((mapElement->properties.path.type + rotation) & 0x3) + 1;
 	}
 
 	if (byte_98D8A4[edges] == 0) {
@@ -813,31 +809,18 @@ void loc_6A37C9(rct_map_element * mapElement, int height, rct_footpath_entry * f
 
 void loc_6A3B57(rct_map_element* mapElement, sint16 height, rct_footpath_entry* footpathEntry, bool hasFences, uint32 imageFlags, uint32 sceneryImageFlags)
 {
-	// Rol edges around rotation
-	uint8 edges = ((mapElement->properties.path.edges << get_current_rotation()) & 0xF) |
-		(((mapElement->properties.path.edges & 0xF) << get_current_rotation()) >> 4);
+	uint8 type = footpath_element_get_type(mapElement);
+	uint8 rotation = get_current_rotation();
 
-	rct_xy16 boundBoxOffset = {
-		.x = stru_98D804[edges][0],
-		.y = stru_98D804[edges][1]
-	};
-
-	rct_xy16 boundBoxSize = {
-		.x = stru_98D804[edges][2],
-		.y = stru_98D804[edges][3]
-	};
-
-	uint8 corners = (((mapElement->properties.path.edges >> 4) << get_current_rotation()) & 0xF) |
-		(((mapElement->properties.path.edges >> 4) << get_current_rotation()) >> 4);
-
-	uint16 edi = edges | (corners << 4);
+	// Rotate edges and corners around rotation
+	uint8 perimeter = path_rotate_perimeter(mapElement->properties.path.edges, rotation);
+	uint8 edges = perimeter & 0xF;
 
 	uint32 imageId;
 	if (footpath_element_is_sloped(mapElement)) {
-		imageId = ((mapElement->properties.path.type + get_current_rotation()) & 3) + 16;
-	}
-	else {
-		imageId = byte_98D6E0[edi];
+		imageId = ((mapElement->properties.path.type + rotation) & 3) + 16;
+	} else {
+		imageId = byte_98D6E0[perimeter];
 	}
 
 
@@ -846,71 +829,66 @@ void loc_6A3B57(rct_map_element* mapElement, sint16 height, rct_footpath_entry* 
 		imageId += 51;
 	}
 
-	// Below Surface
-	if (!RCT2_GLOBAL(0x9DE57C, bool)) {
-		boundBoxOffset.x = 3;
-		boundBoxOffset.y = 3;
-		boundBoxSize.x = 26;
-		boundBoxSize.y = 26;
+	rct_xy16 boundBoxOffset;
+	rct_xy16 boundBoxSize;
+
+	if (RCT2_GLOBAL(0x9DE57C, bool)) {
+		// Above surface
+		boundBoxOffset = (rct_xy16){ .x = stru_98D804[edges][0], .y = stru_98D804[edges][1] };
+		boundBoxSize = (rct_xy16){ .x = stru_98D804[edges][2], .y = stru_98D804[edges][3] };
+	} else {
+		// Below Surface
+		boundBoxOffset = (rct_xy16){ .x = 3, .y = 3 };
+		boundBoxSize = (rct_xy16){ .x = 26, .y = 26 };
 	}
 
 	if (!hasFences || !RCT2_GLOBAL(0x9DE57C, bool)) {
-		sub_98197C(imageId | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, get_current_rotation());
-	}
-	else {
+		sub_98197C(imageId | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, rotation);
+	} else {
 		uint32 bridgeImage;
 		if (footpath_element_is_sloped(mapElement)) {
-			bridgeImage = ((mapElement->properties.path.type + get_current_rotation()) & 3) + footpathEntry->bridge_image + 16;
-		}
-		else {
+			bridgeImage = ((mapElement->properties.path.type + rotation) & 3) + footpathEntry->bridge_image + 16;
+		} else {
 			bridgeImage = edges + footpathEntry->bridge_image;
 			bridgeImage |= imageFlags;
 		}
 
-		sub_98197C(bridgeImage | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, get_current_rotation());
+		sub_98197C(bridgeImage | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, rotation);
 
 		if ((mapElement->type & 1) || (footpathEntry->flags & 2)) {
-			sub_98199C(imageId | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, get_current_rotation());
+			sub_98199C(imageId | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, rotation);
 		}
 	}
 
-	sub_6A3F61(mapElement, edi, height, footpathEntry, imageFlags, sceneryImageFlags, hasFences); // TODO: arguments
-
-	uint16 ax = 0;
-	if (footpath_element_is_sloped(mapElement)) {
-		ax = 8;
-	}
-
-	uint8 supports[] = {
-		6,
-		8,
-		7,
-		5
-	};
-
+	sub_6A3F61(mapElement, perimeter, height, footpathEntry, imageFlags, sceneryImageFlags, hasFences); // TODO: arguments
 	RCT2_GLOBAL(0x00F3EF6C, rct_footpath_entry*) = footpathEntry;
-	for (sint8 i = 3; i > -1; --i) {
+
+	uint16 path_special_flag = 0;
+	sint16 support_height = height + 32;
+	if (footpath_element_is_sloped(mapElement)) {
+		path_special_flag = 8;
+		support_height += 16;
+	}
+
+	uint8 supports[] = { 6, 8, 7, 5 };
+
+	for (int i = 3; i > -1; --i) {
 		if (!(edges & (1 << i))) {
-			path_b_supports_paint_setup(supports[i], ax, height, imageFlags);
+			path_b_supports_paint_setup(supports[i], path_special_flag, height, imageFlags);
 		}
 	}
-
-	height += 32;
-	if (footpath_element_is_sloped(mapElement)) {
-		height += 16;
-	}
-
-	paint_util_set_general_support_height(height, 0x20);
 	
-	if ((mapElement->type & 1)
-	    || (mapElement->properties.path.edges != 0xFF && hasFences)
-		) {
+	sint16 x = RCT2_GLOBAL(0x009DE56A, sint16);
+	sint16 y = RCT2_GLOBAL(0x009DE56E, sint16);
 
+	paint_util_set_general_support_height(support_height, 0x20);
+	
+	if (footpath_element_is_queue(mapElement) || (hasFences && perimeter != 0xFF)) {
 		paint_util_set_segment_support_height(SEGMENTS_ALL, 0xFFFF, 0);
 		return;
 	}
 
-	if (mapElement->properties.path.edges == 0xFF) {
+	if (perimeter == 0xFF) {
 		paint_util_set_segment_support_height(SEGMENT_C8 | SEGMENT_CC | SEGMENT_D0 | SEGMENT_D4, 0xFFFF, 0);
 		return;
 	}
@@ -933,4 +911,25 @@ void loc_6A3B57(rct_map_element* mapElement, sint16 height, rct_footpath_entry* 
 		paint_util_set_segment_support_height(SEGMENT_C8, 0xFFFF, 0);
 	}
 
+}
+
+/**
+ * Rotate upper and lower 4 bits of perimeter by rotation
+ */
+static inline uint8	path_rotate_perimeter(uint8 perimeter, uint8 rotation)
+{
+	uint8 x1, x2, m1, m2;
+
+	// Rotation masks
+	m2 = (0x77331100 >> (rotation << 3)) & 0xFF;
+	m1 = ~m2;
+
+	x1 = x2 = rol8(perimeter, rotation);
+	// Bits that were rotated out need to be shuffled to the other side of the byte
+	x2 = rol8(x2, 4);
+
+	x1 &= m1;
+	x2 &= m2;
+
+	return x1 | x2;
 }
