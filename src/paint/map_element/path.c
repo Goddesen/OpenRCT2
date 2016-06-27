@@ -699,118 +699,18 @@ void path_paint(uint8 direction, uint16 height, rct_map_element * map_element)
 	uint8 pathType = (map_element->properties.path.type & 0xF0) >> 4;
 	rct_footpath_entry * footpathEntry = gFootpathEntries[pathType];
 
-	if (footpathEntry->var_0A == 0) {
-		loc_6A37C9(map_element, height, footpathEntry, word_F3F038, imageFlags, sceneryImageFlags);
-	} else {
-		loc_6A3B57(map_element, height, footpathEntry, word_F3F038, imageFlags, sceneryImageFlags);
-	}
+	loc_6A37C9(map_element, height, footpathEntry, word_F3F038, imageFlags, sceneryImageFlags);
 }
 
+/**
+ * Previously loc_6A37C9 and loc_6A3B57
+ */
 void loc_6A37C9(rct_map_element * mapElement, int height, rct_footpath_entry * footpathEntry, bool hasFences, uint32 imageFlags, uint32 sceneryImageFlags)
 {
+	// TODO: Bottom of supports for slopes does not use correct sprite
+
 	uint8 rotation = get_current_rotation();
-
-	// Rotate edges and corners around rotation
-	uint8 perimeter = path_rotate_perimeter(mapElement->properties.path.edges, rotation);
-	uint8 edges = perimeter & 0xF;
-
-	rct_xy16 boundBoxOffset = {.x =stru_98D804[edges][0], .y = stru_98D804[edges][1]};
-	rct_xy16 boundBoxSize = {.x =stru_98D804[edges][2], .y = stru_98D804[edges][3]};
-
-	uint32 imageId;
-	if (footpath_element_is_sloped(mapElement)) {
-		imageId = ((mapElement->properties.path.type + rotation) & 3) + 16;
-	} else {
-		imageId = byte_98D6E0[perimeter];
-	}
-
-	imageId += footpathEntry->image;
-	if (mapElement->type & 1) {
-		imageId += 51;
-	}
-
-	if (!RCT2_GLOBAL(0x9DE57C, bool)) {
-		boundBoxOffset.x = 3;
-		boundBoxOffset.y = 3;
-		boundBoxSize.x = 26;
-		boundBoxSize.y = 26;
-	}
-
-	if (!hasFences || !RCT2_GLOBAL(0x9DE57C, bool)) {
-		sub_98197C(imageId | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, rotation);
-	} else {
-		uint32 image_id;
-		if (footpath_element_is_sloped(mapElement)) {
-			image_id = ((mapElement->properties.path.type + rotation) & 3) + footpathEntry->bridge_image + 51;
-		} else {
-			image_id = byte_98D8A4[edges] + footpathEntry->bridge_image + 49;
-		}
-
-		sub_98197C(image_id | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, rotation);
-
-		if (!(mapElement->type & 1) && !(footpathEntry->flags & 2)) {
-			// don't draw
-		} else {
-			sub_98199C(imageId | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, rotation);
-		}
-	}
-
-
-	sub_6A3F61(mapElement, perimeter, height, footpathEntry, imageFlags, sceneryImageFlags, hasFences);
-
-	uint16 ax = 0;
-	if (footpath_element_is_sloped(mapElement)) {
-		ax = ((mapElement->properties.path.type + rotation) & 0x3) + 1;
-	}
-
-	if (byte_98D8A4[edges] == 0) {
-		path_a_supports_paint_setup(0, ax, height, imageFlags, footpathEntry, NULL);
-	} else {
-		path_a_supports_paint_setup(1, ax, height, imageFlags, footpathEntry, NULL);
-	}
-
-	height += 32;
-	if (footpath_element_is_sloped(mapElement)) {
-		height += 16;
-	}
-
-	paint_util_set_general_support_height(height, 0x20);
-
-	if ((mapElement->type & 1)
-	    || (mapElement->properties.path.edges != 0xFF && hasFences)
-		) {
-		paint_util_set_all_segments_support_invalid_height();
-		return;
-	}
-
-	if (mapElement->properties.path.edges == 0xFF) {
-		paint_util_set_segment_support_invalid_height(SEGMENT_C8 | SEGMENT_CC | SEGMENT_D0 | SEGMENT_D4);
-		return;
-	}
-
-	paint_util_set_segment_support_invalid_height(SEGMENT_C4);
-
-	if (edges & 1) {
-		paint_util_set_segment_support_invalid_height(SEGMENT_CC);
-	}
-
-	if (edges & 2) {
-		paint_util_set_segment_support_invalid_height(SEGMENT_D4);
-	}
-
-	if (edges & 4) {
-		paint_util_set_segment_support_invalid_height(SEGMENT_D0);
-	}
-
-	if (edges & 8) {
-		paint_util_set_segment_support_invalid_height(SEGMENT_C8);
-	}
-}
-
-void loc_6A3B57(rct_map_element* mapElement, sint16 height, rct_footpath_entry* footpathEntry, bool hasFences, uint32 imageFlags, uint32 sceneryImageFlags)
-{
-	uint8 type = footpath_element_get_type(mapElement);
-	uint8 rotation = get_current_rotation();
+	uint8 worldspace_path_rotation = (mapElement->properties.path.type + rotation) & 3;
 
 	// Rotate edges and corners around rotation
 	uint8 perimeter = path_rotate_perimeter(mapElement->properties.path.edges, rotation);
@@ -818,11 +718,10 @@ void loc_6A3B57(rct_map_element* mapElement, sint16 height, rct_footpath_entry* 
 
 	uint32 imageId;
 	if (footpath_element_is_sloped(mapElement)) {
-		imageId = ((mapElement->properties.path.type + rotation) & 3) + 16;
+		imageId = worldspace_path_rotation + 16;
 	} else {
 		imageId = byte_98D6E0[perimeter];
 	}
-
 
 	imageId += footpathEntry->image;
 	if (mapElement->type & 1) {
@@ -847,42 +746,52 @@ void loc_6A3B57(rct_map_element* mapElement, sint16 height, rct_footpath_entry* 
 	} else {
 		uint32 bridgeImage;
 		if (footpath_element_is_sloped(mapElement)) {
-			bridgeImage = ((mapElement->properties.path.type + rotation) & 3) + footpathEntry->bridge_image + 16;
+			bridgeImage = worldspace_path_rotation + footpathEntry->bridge_image + 16;
+			if (footpathEntry->var_0A == 0) {
+				bridgeImage += 35;
+			}
 		} else {
-			bridgeImage = edges + footpathEntry->bridge_image;
-			bridgeImage |= imageFlags;
+			bridgeImage = footpathEntry->bridge_image;
+			if (footpathEntry->var_0A) {
+				bridgeImage += edges;
+			} else {
+				bridgeImage += byte_98D8A4[edges] + 49;
+			}
 		}
 
 		sub_98197C(bridgeImage | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, rotation);
 
-		if ((mapElement->type & 1) || (footpathEntry->flags & 2)) {
+		if (footpath_element_is_queue(mapElement) || (footpathEntry->flags & 2)) {
 			sub_98199C(imageId | imageFlags, 0, 0, boundBoxSize.x, boundBoxSize.y, 0, height, boundBoxOffset.x, boundBoxOffset.y, height + 1, rotation);
 		}
 	}
 
-	sub_6A3F61(mapElement, perimeter, height, footpathEntry, imageFlags, sceneryImageFlags, hasFences); // TODO: arguments
-	RCT2_GLOBAL(0x00F3EF6C, rct_footpath_entry*) = footpathEntry;
+	sub_6A3F61(mapElement, perimeter, height, footpathEntry, imageFlags, sceneryImageFlags, hasFences);
+	if (footpathEntry->var_0A)
+		RCT2_GLOBAL(0x00F3EF6C, rct_footpath_entry*) = footpathEntry;
 
 	uint16 path_special_flag = 0;
 	sint16 support_height = height + 32;
 	if (footpath_element_is_sloped(mapElement)) {
-		path_special_flag = 8;
+		path_special_flag = (footpathEntry->var_0A == 0) ? worldspace_path_rotation + 1 : 8;
 		support_height += 16;
 	}
 
-	uint8 supports[] = { 6, 8, 7, 5 };
+	if (footpathEntry->var_0A == 0) {
+			path_a_supports_paint_setup(byte_98D8A4[edges], path_special_flag, height, imageFlags, footpathEntry, NULL);
+			paint_util_set_general_support_height(support_height, 0x20);
+	} else {
+		uint8 supports[] = { 6, 8, 7, 5 };
 
-	for (int i = 3; i > -1; --i) {
-		if (!(edges & (1 << i))) {
-			path_b_supports_paint_setup(supports[i], path_special_flag, height, imageFlags);
+		for (int i = 3; i > -1; --i) {
+			if (!(edges & (1 << i))) {
+				path_b_supports_paint_setup(supports[i], path_special_flag, height, imageFlags);
+			}
 		}
 	}
 	
-	sint16 x = RCT2_GLOBAL(0x009DE56A, sint16);
-	sint16 y = RCT2_GLOBAL(0x009DE56E, sint16);
-
 	paint_util_set_general_support_height(support_height, 0x20);
-	
+
 	if (footpath_element_is_queue(mapElement) || (hasFences && perimeter != 0xFF)) {
 		paint_util_set_all_segments_support_invalid_height();
 		return;
@@ -893,24 +802,9 @@ void loc_6A3B57(rct_map_element* mapElement, sint16 height, rct_footpath_entry* 
 		return;
 	}
 
-	paint_util_set_segment_support_invalid_height(SEGMENT_C4);
-
-	if (edges & 1) {
-		paint_util_set_segment_support_invalid_height(SEGMENT_CC);
-	}
-
-	if (edges & 2) {
-		paint_util_set_segment_support_invalid_height(SEGMENT_D4);
-	}
-
-	if (edges & 4) {
-		paint_util_set_segment_support_invalid_height(SEGMENT_D0);
-	}
-
-	if (edges & 8) {
-		paint_util_set_segment_support_invalid_height(SEGMENT_C8);
-	}
-
+	// Same as if (edges & 1) then SEGMENT_CC ; if ...
+	uint8 segments = ((edges & 0x1) << 1) | ((edges & 0x2) << 2) | ((edges & 0x4) << 3) | ((edges & 0x8) << 4);
+	paint_util_set_segment_support_invalid_height(segments | SEGMENT_C4);
 }
 
 /**
