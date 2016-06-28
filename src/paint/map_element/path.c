@@ -14,6 +14,7 @@
  *****************************************************************************/
 #pragma endregion
 
+#include <immintrin.h>
 #include "../../interface/viewport.h"
 #include "../../localisation/localisation.h"
 #include "../../peep/staff.h"
@@ -803,7 +804,10 @@ void loc_6A37C9(rct_map_element * mapElement, int height, rct_footpath_entry * f
 	}
 
 	// Same as if (edges & 1) then SEGMENT_CC ; if ...
-	uint8 segments = ((edges & 0x1) << 1) | ((edges & 0x2) << 2) | ((edges & 0x4) << 3) | ((edges & 0x8) << 4);
+	uint8 segments = ((edges & 0x1) << 1) |
+					 ((edges & 0x2) << 2) |
+					 ((edges & 0x4) << 3) |
+					 ((edges & 0x8) << 4);
 	paint_util_set_segment_support_invalid_height(segments | SEGMENT_C4);
 }
 
@@ -812,18 +816,6 @@ void loc_6A37C9(rct_map_element * mapElement, int height, rct_footpath_entry * f
  */
 static inline uint8	path_rotate_perimeter(uint8 perimeter, uint8 rotation)
 {
-	uint8 x1, x2, m1, m2;
-
-	// Rotation masks
-	m2 = (0x77331100 >> (rotation << 3)) & 0xFF;
-	m1 = ~m2;
-
-	x1 = x2 = rol8(perimeter, rotation);
-	// Bits that were rotated out need to be shuffled to the other side of the byte
-	x2 = rol8(x2, 4);
-
-	x1 &= m1;
-	x2 &= m2;
-
-	return x1 | x2;
+	uint8 m = (0x11 << rotation) - 0x11;
+	return ((perimeter << rotation) & ~m) | ((perimeter >> (4 - rotation)) & m);
 }
