@@ -64,8 +64,10 @@ void keyboard_shortcut_set(keypress key)
  */
 void keyboard_shortcut_handle(keypress key)
 {
+	log_verbose("%s: Testing key (0x%08x, 0x%04x)", __func__, key.keycode, key.mod);
 	int i;
 	for (i = 0; i < SHORTCUT_COUNT; i++) {
+		log_verbose(" ... Testing against shortcut: (0x%08x, 0x%04x) = %s", gShortcutKeys[i].keycode, gShortcutKeys[i].mod, (platform_keypress_equals(key, gShortcutKeys[i])) ? "true" : "false");
 		if (platform_keypress_equals(key, gShortcutKeys[i])) {
 			keyboard_shortcut_handle_command(i);
 			return;
