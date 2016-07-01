@@ -80,7 +80,10 @@ void keyboard_shortcut_handle_command(int shortcutIndex)
 	if (shortcutIndex >= 0 && shortcutIndex < SHORTCUT_COUNT) {
 		shortcut_action action = shortcut_table[shortcutIndex];
 		if (action != NULL) {
+			log_verbose("Executing shortcut: %2d", shortcutIndex);
 			action();
+		} else {
+			log_error("Invalid shortcut action pointer for shorcut: %2d", shortcutIndex);
 		}
 	}
 }
