@@ -338,6 +338,8 @@ void platform_process_messages()
 				}
 
 				skip = true;
+
+				log_verbose("Gained focus. Clearing input state,");
 			}
 
 			if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
@@ -354,6 +356,8 @@ void platform_process_messages()
 				}
 
 				skip = true;
+
+				log_verbose("Lost focus. Clearing input state.");
 			}
 
 			// Handle no input during window events.
@@ -462,6 +466,8 @@ void platform_process_messages()
 			if (gTextInputCompositionActive)
 				break;
 
+			log_verbose("KEYDOWN: Got key: scan:0x%08x, key:0x%08x, mod:0x%04x", e.key.keysym.scancode, e.key.keysym.sym, e.key.keysym.mod);
+
 			// Ignore unknown keys
 			if ((e.key.keysym.sym & ~(1<<30)) == SDLK_UNKNOWN)
 				break;
@@ -492,6 +498,8 @@ void platform_process_messages()
 				// Handle only KEYBOARD_KEYPRESSES_PER_UPDATE keypresses per update
 				gKeysPressed[gNumKeysPressed] = gLastKeyPressed;
 				++gNumKeysPressed;
+
+				log_verbose("INPUT: Registered scan:0x%08x, key:0x%08x, mod:0x%04x", e.key.keysym.scancode, key.keycode, key.mod);
 			}
 
 			// Handle map scrolling keys
@@ -949,6 +957,9 @@ static void platform_filter_keypress(keypress *key)
 static inline void platform_map_keys_stack_insert(int val)
 {
 	int i;
+	int old[4];
+	for (i = 0; i < 4; ++i)
+		old[i] = gMapKeysStack[i];
 
 	for (i = 0; i < 3; ++i) {
 		if (val == gMapKeysStack[i] ) {
@@ -961,11 +972,16 @@ static inline void platform_map_keys_stack_insert(int val)
 	}
 
 	gMapKeysStack[0] = val;
+
+	log_verbose("%s: Inserted %2d, [%2d, %2d, %2d, %2d] -> [%2d, %2d, %2d, %2d]", __func__, val, old[0], old[1], old[2], old[3], gMapKeysStack[0], gMapKeysStack[1], gMapKeysStack[2], gMapKeysStack[3]);
 }
 
 static inline void platform_map_keys_stack_remove(int val)
 {
 	int i;
+	int old[4];
+	for (i = 0; i < 4; ++i)
+		old[i] = gMapKeysStack[i];
 
 	for (i = 0; i < 3; ++i) {
 		if (val == gMapKeysStack[i]) {
@@ -978,6 +994,7 @@ static inline void platform_map_keys_stack_remove(int val)
 	}
 
 	gMapKeysStack[3] = 0;
+	log_verbose("%s: Removed  %2d, [%2d, %2d, %2d, %2d] -> [%2d, %2d, %2d, %2d]", __func__, val, old[0], old[1], old[2], old[3], gMapKeysStack[0], gMapKeysStack[1], gMapKeysStack[2], gMapKeysStack[3]);
 }
 
 void platform_map_keys_stack_clear(void)
