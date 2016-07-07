@@ -345,10 +345,10 @@ void paint_util_set_segment_support_height(int segments, uint16 height, uint8 sl
 {
 	if (height != 0xFFFF) {
 		// Might not work for big-endian
-		uint32 tmp = ((uint32)height << 16) | ((uint32)slope << 8);
+		uint32 tmp = (uint32)height | ((uint32)slope << 16);
 		for (int s = 0; s < countof(segment_offsets); s++) {
 			if (segments & segment_offsets[s]) {
-				RCT2_GLOBAL(0x0141E9B6 + s * 4, uint32) = tmp;
+				RCT2_GLOBAL(0x0141E9B4 + s * 4, uint32) = tmp;
 			}
 		}
 	} else {
