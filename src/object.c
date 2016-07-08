@@ -1822,10 +1822,10 @@ void *object_aligned_alloc_pad(size_t alignment, size_t size)
 	}
 
 	// Align chunk pointer on boundary.
-	void *ptr_aligned = (void *)((uint8 *)ptr + sizeof(size_t) + sizeof(uint8 *) + alignment - 1 - (size % alignment));
+	void *ptr_aligned = (void *)((uint8 *)ptr + sizeof(size_t) + sizeof(uint8 *) + alignment - 1 - remainder);
 
 	// Save alignment for realloc
-	((size_t *)ptr_aligned)[-2] = alignment;
+	((size_t *)((uint8 *)ptr_aligned - sizeof(void *)))[-1] = alignment;
 	// Save original pointer for free
 	((void **)ptr_aligned)[-1] = ptr;
 
