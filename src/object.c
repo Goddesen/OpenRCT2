@@ -409,6 +409,11 @@ int object_entry_compare(const rct_object_entry *a, const rct_object_entry *b)
 
 uint32 object_calculate_checksum(const rct_object_entry *RESTRICT entry, const uint8 *RESTRICT data, int dataLength)
 {
+#if defined(__GNUC__) || defined(__clang__)
+	data = (uint8 *)__builtin_assume_aligned(data, 32);
+	__builtin_prefetch(data, 0, 0);
+#endif
+
 	uint8 *entry_bytes = (uint8 *)entry;
 	uint32 checksum = 0xF369A75B;
 
