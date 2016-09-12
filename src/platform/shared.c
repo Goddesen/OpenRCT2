@@ -362,6 +362,7 @@ void platform_process_messages()
 
 			// Handle no input during window events.
 			memset(gKeysPressed, 0x0, sizeof(keypress) * KEYBOARD_KEYPRESSES_PER_UPDATE);
+			log_verbose("Window event! Clearing input state.");
 
 			break;
 		case SDL_MOUSEMOTION:
@@ -500,6 +501,7 @@ void platform_process_messages()
 				++gNumKeysPressed;
 
 				log_verbose("INPUT: Registered scan:0x%08x, key:0x%08x, mod:0x%04x", e.key.keysym.scancode, key.keycode, key.mod);
+				//log_verbose("INPUT: gNumKeysPressed is now %d,", gNumKeysPressed);
 			}
 
 			// Handle map scrolling keys

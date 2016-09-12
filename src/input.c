@@ -1447,6 +1447,8 @@ void title_handle_keyboard_input()
  */
 void game_handle_keyboard_input()
 {
+	if (gNumKeysPressed > 0)
+		log_verbose("%s: gNumKeysPressed = %d", __func__, gNumKeysPressed);
 	rct_window *w;
 	keypress key;
 
@@ -1475,32 +1477,40 @@ void game_handle_keyboard_input()
 			}
 			continue;
 		}
+		log_verbose("%s: keycode is not backtick.", __func__);
 
 		if (gConsoleOpen) {
 			console_input(key.keycode);
 			continue;
 		}
+		log_verbose("%s: console is not open.", __func__);
 
 		if (gChatOpen) {
 			chat_input(key.keycode);
 			continue;
 		}
+		log_verbose("%s: chat is not open.", __func__);
 
 		w = window_find_by_class(WC_CHANGE_KEYBOARD_SHORTCUT);
 		if (w != NULL) {
 			keyboard_shortcut_set(key);
 			continue;
 		}
+		log_verbose("%s: set_shortcut widget not open.", __func__);
 
 		w = window_find_by_class(WC_TEXTINPUT);
 		if (w != NULL) {
 			window_text_input_key(w, key.keycode);
 			continue;
 		}
+		log_verbose("%s: text input widget is not open.", __func__);
 
 		if (!gUsingWidgetTextBox) {
 			keyboard_shortcut_handle(key);
+			continue;
 		}
+		log_verbose("%s: gUsingWidgetTextBox is set.", __func__);
+		log_verbose("%s: key not in use!", __func__);
 	}
 }
 
@@ -1510,10 +1520,13 @@ void game_handle_keyboard_input()
  */
 int get_next_key(keypress *keypress)
 {
+	if (gCurKeyNum != 0 && gNumKeysPressed != 0)
+		log_verbose("%s: gCurKeyNum:%d, gNumKeysPressed:%d", __func__, gCurKeyNum, gNumKeysPressed);
 	if (gCurKeyNum >= gNumKeysPressed)
 		return -1;
 
 	*keypress = gKeysPressed[gCurKeyNum];
+	log_verbose("%s: set *keypress(%p) to keycode:0x%08x mod:0x%04x", __func__, keypress, keypress->keycode, keypress->mod);
 
 	++gCurKeyNum;
 	return 0;
