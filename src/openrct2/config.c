@@ -973,12 +973,6 @@ bool config_find_or_browse_install_directory()
 
 #pragma region Shortcuts
 
-#ifdef __MACOSX__
-	#define PLATFORM_MODIFIER KMOD_GUI
-#else
-	#define PLATFORM_MODIFIER KMOD_CTRL
-#endif
-
 // Current keyboard shortcuts
 keypress gShortcutKeys[SHORTCUT_COUNT];
 
