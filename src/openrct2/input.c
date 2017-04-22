@@ -1514,8 +1514,17 @@ sint32 get_next_key(keypress *kp)
 
 	*kp = gKeysPressed[gCurKeyNum];
 
+	printf("get_next_key: Got keypress (%08x, %04x)\n", kp->keycode, kp->mod);
+
 	++gCurKeyNum;
 	return 0;
+}
+
+void print_gKeysPressed(void)
+{
+	for (int i = 0; i < gNumKeysPressed; ++i) {
+		printf("gKeysPressed[%d]: (%08x, %04x)\n", i, gKeysPressed[i].keycode, gKeysPressed[i].mod);
+	}
 }
 
 #pragma endregion

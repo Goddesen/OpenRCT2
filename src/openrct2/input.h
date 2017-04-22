@@ -103,4 +103,6 @@ void reset_tooltip_not_shown();
 
 void input_reset_place_obj_modifier();
 
+void print_gKeysPressed(void);
+
 #endif

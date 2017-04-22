@@ -36,6 +36,7 @@
 
 extern "C"
 {
+	#include "input.h"
     #include "audio/audio.h"
     #include "config/Config.h"
     #include "editor.h"
@@ -53,7 +54,7 @@ extern "C"
 }
 
 // The game update inverval in milliseconds, (1000 / 40fps) = 25ms
-constexpr uint32 UPDATE_TIME_MS = 25;
+constexpr uint32 UPDATE_TIME_MS = 1000;
 
 extern "C"
 {
@@ -467,6 +468,9 @@ namespace OpenRCT2
             _lastTick = currentTick;
         }
         platform_process_messages();
+
+		print_gKeysPressed();
+
         rct2_update();
         if (!_isWindowMinimised)
         {

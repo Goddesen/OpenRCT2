@@ -364,6 +364,7 @@ void platform_process_messages()
 			}
 
 			// Handle no input during window events.
+			printf("SDL_WINDOWEVENT: Resetting gKeysPressed\n");
 			memset(gKeysPressed, 0x0, sizeof(keypress) * KEYBOARD_KEYPRESSES_PER_UPDATE);
 
 			break;
@@ -474,14 +475,19 @@ void platform_process_messages()
 				break;
 
 			key = (keypress){ e.key.keysym.sym, e.key.keysym.mod };
+
+			printf("SDL_KEYDOWN: Got keypress: (%08x, %04x)\n", key.keycode, key.mod);
+
 			platform_filter_keypress(&key);
 
 			if (gTextInput.buffer != NULL)
 				platform_process_text_input_special_keys(key);
 
 			// We don't want repeat events (repeats from key being held down)
-			if (e.key.repeat)
+			if (e.key.repeat) {
+				printf("SDL_KEYDOWN: e.key.repeat == 1!\n");
 				break;
+			}
 
 			// Handle modifiers
 			mod_held_idx = key.keycode - SDLK_LCTRL;
@@ -498,6 +504,9 @@ void platform_process_messages()
 			if (gNumKeysPressed < KEYBOARD_KEYPRESSES_PER_UPDATE) {
 				// Handle only KEYBOARD_KEYPRESSES_PER_UPDATE keypresses per update
 				gKeysPressed[gNumKeysPressed] = gLastKeyPressed;
+
+				printf("SDL_KEYDOWN: Inserted keypress (%08x, %04x) into gKeysPressed at idx:%d\n", gLastKeyPressed.keycode, gLastKeyPressed.mod, gNumKeysPressed);
+
 				++gNumKeysPressed;
 			}
 
